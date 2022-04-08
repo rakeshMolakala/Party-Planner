@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">partyplanner</string>
+    <string name="party_planner">Party Planner</string>
+    <string name="hosting_a_party_done_right">Hosting a party done right</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="not_an_existing_user">Not an existing user?</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="username">Username</string>
+    <string name="already_an_existing_user">Already an existing user?</string>
+    <string name="design">Design</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="want_to_go_back">Want to go back?</string>
 </resources>
