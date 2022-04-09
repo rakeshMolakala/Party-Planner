@@ -49,8 +49,9 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/usernameHolder"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="32dp"
@@ -58,26 +59,27 @@
                 android:textColorHint="#666666"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
-                app:endIconDrawable="@drawable/user"
-                app:endIconMode="custom"
-                app:endIconTint="#7500DB">
+                app:endIconMode="clear_text"
+                app:endIconTint="#7500DB"
+                app:startIconDrawable="@drawable/user"
+                app:startIconTint="#7500DB">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/username"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:autofillHints=""
                     android:background="@drawable/edittext_back"
                     android:ems="10"
                     android:hint="@string/username"
                     android:inputType="textPersonName"
-                    android:paddingTop="30dp"
                     android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emailSignupHolder"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="32dp"
@@ -85,26 +87,27 @@
                 android:textColorHint="#666666"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
-                app:endIconDrawable="@drawable/email"
-                app:endIconMode="custom"
-                app:endIconTint="#7500DB">
+                app:endIconMode="clear_text"
+                app:endIconTint="#7500DB"
+                app:startIconDrawable="@drawable/email"
+                app:startIconTint="#7500DB">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emailSignup"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:autofillHints=""
                     android:background="@drawable/edittext_back"
                     android:ems="10"
                     android:hint="@string/email_address"
                     android:inputType="textEmailAddress"
-                    android:paddingTop="30dp"
                     android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordSignupHolder"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="32dp"
@@ -113,24 +116,26 @@
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
                 app:passwordToggleEnabled="true"
-                app:passwordToggleTint="#7500DB">
+                app:passwordToggleTint="#7500DB"
+                app:startIconDrawable="@drawable/password"
+                app:startIconTint="#7500DB">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/passwordSignup"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:autofillHints=""
                     android:background="@drawable/edittext_back"
                     android:ems="10"
                     android:hint="@string/password"
                     android:inputType="textPassword"
-                    android:paddingTop="30dp"
                     android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/rePasswordSignupHolder"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="32dp"
@@ -139,18 +144,19 @@
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
                 app:passwordToggleEnabled="true"
-                app:passwordToggleTint="#7500DB">
+                app:passwordToggleTint="#7500DB"
+                app:startIconDrawable="@drawable/password"
+                app:startIconTint="#7500DB">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/rePasswordSignup"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:autofillHints=""
                     android:background="@drawable/edittext_back"
                     android:ems="10"
                     android:hint="@string/confirm_password"
                     android:inputType="textPassword"
-                    android:paddingTop="30dp"
                     android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 

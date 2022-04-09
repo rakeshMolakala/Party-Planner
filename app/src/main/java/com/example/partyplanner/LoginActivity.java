@@ -1,27 +1,30 @@
 package com.example.partyplanner;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
-    private EditText emailLogin, passwordLogin;
+    private TextInputLayout emailLoginHolder, passwordLoginHolder;
     private TextView ltoS, forgotPassword;
     private Button login;
     private ProgressBar progressbar;
     private FirebaseAuth authentication;
+    private FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,40 +33,48 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         authentication = FirebaseAuth.getInstance();
-        emailLogin = findViewById(R.id.emailLogin);
-        passwordLogin = findViewById(R.id.passwordLogin);
+        emailLoginHolder = findViewById(R.id.emailLoginHolder);
+        passwordLoginHolder = findViewById(R.id.passwordLoginHolder);
         login = findViewById(R.id.login);
         ltoS = findViewById(R.id.loginToSignup);
         forgotPassword = findViewById(R.id.forgotPassword);
         progressbar = findViewById(R.id.progressbarLogin);
 
         login.setOnClickListener(view -> {
-            passwordLogin.onEditorAction(EditorInfo.IME_ACTION_DONE);
-            String email = emailLogin.getText().toString().trim();
-            String password = passwordLogin.getText().toString().trim();
+            passwordLoginHolder.getEditText().onEditorAction(EditorInfo.IME_ACTION_DONE);
+            String email = emailLoginHolder.getEditText().getText().toString().trim();
+            String password = passwordLoginHolder.getEditText().getText().toString().trim();
 
             if (email.isEmpty()) {
-                emailLogin.setError("Email is required!");
-                emailLogin.requestFocus();
+                emailLoginHolder.setError("Email is required!");
+                emailLoginHolder.requestFocus();
                 return;
+            } else {
+                emailLoginHolder.setError(null);
             }
 
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                emailLogin.setError("Please enter a valid email!");
-                emailLogin.requestFocus();
+                emailLoginHolder.setError("Please enter a valid email!");
+                emailLoginHolder.requestFocus();
                 return;
+            } else {
+                emailLoginHolder.setError(null);
             }
 
             if (password.isEmpty()) {
-                passwordLogin.setError("Password is required!");
-                passwordLogin.requestFocus();
+                passwordLoginHolder.setError("Password is required!");
+                passwordLoginHolder.requestFocus();
                 return;
+            } else {
+                passwordLoginHolder.setError(null);
             }
 
             if (password.length() < 6) {
-                passwordLogin.setError("Password should consist a minimum of 6 characters!");
-                passwordLogin.requestFocus();
+                passwordLoginHolder.setError("Password should consist a minimum of 6 characters!");
+                passwordLoginHolder.requestFocus();
                 return;
+            } else {
+                passwordLoginHolder.setError(null);
             }
 
             progressbar.setVisibility(View.VISIBLE);
@@ -72,8 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     if (user.isEmailVerified()) {
-                        Intent i = new Intent(LoginActivity.this, HomeActivity.class);
-                        startActivity(i);
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     } else {
                         user.sendEmailVerification();
                         Toast.makeText(LoginActivity.this, "Please check your email to verify your account!", Toast.LENGTH_LONG).show();
@@ -85,13 +95,23 @@ public class LoginActivity extends AppCompatActivity {
             });
         });
 
-        forgotPassword.setOnClickListener(view -> {
-            startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
-        });
+        forgotPassword.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class)));
 
-        ltoS.setOnClickListener(view -> {
-            Intent i = new Intent(LoginActivity.this, SignupActivity.class);
-            startActivity(i);
-        });
+        ltoS.setOnClickListener(view1 -> startActivity(new Intent(LoginActivity.this, SignupActivity.class)));
+
+        authStateListener = firebaseAuth -> {
+            if (firebaseAuth.getCurrentUser() != null) {
+                Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                finish();
+                LoginActivity.this.startActivity(i);
+                LoginActivity.this.overridePendingTransition(0, 0);
+            }
+        };
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        authentication.addAuthStateListener(authStateListener);
     }
 }

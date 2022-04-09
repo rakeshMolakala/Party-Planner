@@ -6,21 +6,21 @@ import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SignupActivity extends AppCompatActivity {
-    EditText username, emailSignup, passwordSignup, rePasswordSignup;
-    TextView Stol;
-    Button signup;
-    ProgressBar progressbar;
+    private TextInputLayout usernameHolder, emailSignupHolder, passwordSignupHolder, rePasswordSignupHolder;
+    private TextView Stol;
+    private Button signup;
+    private ProgressBar progressbar;
     private FirebaseAuth authentication;
 
     @Override
@@ -30,62 +30,76 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         authentication = FirebaseAuth.getInstance();
-        username = findViewById(R.id.username);
-        emailSignup = findViewById(R.id.emailSignup);
-        passwordSignup = findViewById(R.id.passwordSignup);
-        rePasswordSignup = findViewById(R.id.rePasswordSignup);
+        usernameHolder = findViewById(R.id.usernameHolder);
+        emailSignupHolder = findViewById(R.id.emailSignupHolder);
+        passwordSignupHolder = findViewById(R.id.passwordSignupHolder);
+        rePasswordSignupHolder = findViewById(R.id.rePasswordSignupHolder);
         Stol = findViewById(R.id.SignupToLogin);
         signup = findViewById(R.id.signup);
         progressbar = findViewById(R.id.progressbarSignup);
 
         signup.setOnClickListener(view -> {
-            rePasswordSignup.onEditorAction(EditorInfo.IME_ACTION_DONE);
+            rePasswordSignupHolder.getEditText().onEditorAction(EditorInfo.IME_ACTION_DONE);
 
-            String name = username.getText().toString().trim();
-            String email = emailSignup.getText().toString().trim();
-            String password = passwordSignup.getText().toString().trim();
-            String conPassword = rePasswordSignup.getText().toString().trim();
+            String name = usernameHolder.getEditText().getText().toString().trim();
+            String email = emailSignupHolder.getEditText().getText().toString().trim();
+            String password = passwordSignupHolder.getEditText().getText().toString().trim();
+            String conPassword = rePasswordSignupHolder.getEditText().getText().toString().trim();
 
             if (name.isEmpty()) {
-                username.setError("Username is required!");
-                username.requestFocus();
+                usernameHolder.setError("Username is required!");
+                usernameHolder.requestFocus();
                 return;
+            } else {
+                usernameHolder.setError(null);
             }
 
             if (email.isEmpty()) {
-                emailSignup.setError("Email is required!");
-                emailSignup.requestFocus();
+                emailSignupHolder.setError("Email is required!");
+                emailSignupHolder.requestFocus();
                 return;
+            } else {
+                emailSignupHolder.setError(null);
             }
 
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                emailSignup.setError("Please enter a valid email!");
-                emailSignup.requestFocus();
+                emailSignupHolder.setError("Please enter a valid email!");
+                emailSignupHolder.requestFocus();
                 return;
+            } else {
+                emailSignupHolder.setError(null);
             }
 
             if (password.isEmpty()) {
-                passwordSignup.setError("Password is required!");
-                passwordSignup.requestFocus();
+                passwordSignupHolder.setError("Password is required!");
+                passwordSignupHolder.requestFocus();
                 return;
+            } else {
+                passwordSignupHolder.setError(null);
             }
 
             if (password.length() < 6) {
-                passwordSignup.setError("Password should consist a minimum of 6 characters!");
-                passwordSignup.requestFocus();
+                passwordSignupHolder.setError("Password should consist a minimum of 6 characters!");
+                passwordSignupHolder.requestFocus();
                 return;
+            } else {
+                passwordSignupHolder.setError(null);
             }
 
             if (conPassword.isEmpty()) {
-                rePasswordSignup.setError("Confirm Password!");
-                rePasswordSignup.requestFocus();
+                rePasswordSignupHolder.setError("Confirm Password!");
+                rePasswordSignupHolder.requestFocus();
                 return;
+            } else {
+                rePasswordSignupHolder.setError(null);
             }
 
             if (!password.equals(conPassword)) {
-                rePasswordSignup.setError("Passwords do not match!");
-                rePasswordSignup.requestFocus();
+                rePasswordSignupHolder.setError("Passwords do not match!");
+                rePasswordSignupHolder.requestFocus();
                 return;
+            } else {
+                rePasswordSignupHolder.setError(null);
             }
 
             progressbar.setVisibility(View.VISIBLE);
@@ -97,6 +111,7 @@ public class SignupActivity extends AppCompatActivity {
                         if (task1.isSuccessful()) {
                             Toast.makeText(SignupActivity.this, "Successfully registered as " + name, Toast.LENGTH_LONG).show();
                             Intent i = new Intent(SignupActivity.this, LoginActivity.class);
+                            finish();
                             startActivity(i);
                         } else {
                             Toast.makeText(SignupActivity.this, "Failed to register! Try again.", Toast.LENGTH_LONG).show();
@@ -112,6 +127,7 @@ public class SignupActivity extends AppCompatActivity {
 
         Stol.setOnClickListener(view -> {
             Intent i = new Intent(SignupActivity.this, LoginActivity.class);
+            finish();
             startActivity(i);
         });
     }

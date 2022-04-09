@@ -15,4 +15,5 @@
     <string name="design">Design</string>
     <string name="reset_password">Reset Password</string>
     <string name="want_to_go_back">Want to go back?</string>
+    <string name="send_mail">Send mail</string>
 </resources>

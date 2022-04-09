@@ -18,10 +18,10 @@
         <activity
             android:name=".ForgotPasswordActivity"
             android:configChanges="orientation|screenSize"
-            android:exported="false" />
+            android:exported="false"/>
 
         <activity
-            android:name=".HomeActivity"
+            android:name=".MainActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false" />
 
