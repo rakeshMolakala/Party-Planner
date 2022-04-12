@@ -9,18 +9,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
     FirebaseAuth authentication;
-    private TextView login;
-    private Button reset;
     private TextInputLayout emailForgot;
     private ProgressBar progressBar;
 
@@ -30,8 +25,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_forgotpassword);
 
-        login = findViewById(R.id.forgotToLogin);
-        reset = findViewById(R.id.reset);
+        TextView login = findViewById(R.id.forgotToLogin);
+        Button reset = findViewById(R.id.reset);
         emailForgot = findViewById(R.id.emailForgot);
         progressBar = findViewById(R.id.progressbarForgot);
         authentication = FirebaseAuth.getInstance();
@@ -56,16 +51,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             }
 
             progressBar.setVisibility(View.VISIBLE);
-            authentication.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(ForgotPasswordActivity.this, "Check your mail to reset your password!", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(ForgotPasswordActivity.this, "Please enter the email you registered with!", Toast.LENGTH_LONG).show();
-                    }
-                    progressBar.setVisibility(View.GONE);
+            authentication.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(ForgotPasswordActivity.this, "Check your mail to reset your password!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(ForgotPasswordActivity.this, "Please enter the email you registered with!", Toast.LENGTH_LONG).show();
                 }
+                progressBar.setVisibility(View.GONE);
             });
         });
 

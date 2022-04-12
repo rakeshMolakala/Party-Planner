@@ -2,6 +2,7 @@ package com.example.partyplanner;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.PhoneNumberUtils;
 import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -17,9 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SignupActivity extends AppCompatActivity {
-    private TextInputLayout usernameHolder, emailSignupHolder, passwordSignupHolder, rePasswordSignupHolder;
-    private TextView Stol;
-    private Button signup;
+    private TextInputLayout usernameHolder, emailSignupHolder, phoneNumberHolder, passwordSignupHolder, rePasswordSignupHolder;
     private ProgressBar progressbar;
     private FirebaseAuth authentication;
 
@@ -32,10 +31,11 @@ public class SignupActivity extends AppCompatActivity {
         authentication = FirebaseAuth.getInstance();
         usernameHolder = findViewById(R.id.usernameHolder);
         emailSignupHolder = findViewById(R.id.emailSignupHolder);
+        phoneNumberHolder = findViewById(R.id.phoneNumberHolder);
         passwordSignupHolder = findViewById(R.id.passwordSignupHolder);
         rePasswordSignupHolder = findViewById(R.id.rePasswordSignupHolder);
-        Stol = findViewById(R.id.SignupToLogin);
-        signup = findViewById(R.id.signup);
+        TextView stol = findViewById(R.id.SignupToLogin);
+        Button signup = findViewById(R.id.signup);
         progressbar = findViewById(R.id.progressbarSignup);
 
         signup.setOnClickListener(view -> {
@@ -43,6 +43,7 @@ public class SignupActivity extends AppCompatActivity {
 
             String name = usernameHolder.getEditText().getText().toString().trim();
             String email = emailSignupHolder.getEditText().getText().toString().trim();
+            String phone = PhoneNumberUtils.formatNumber(phoneNumberHolder.getEditText().getText().toString().trim());
             String password = passwordSignupHolder.getEditText().getText().toString().trim();
             String conPassword = rePasswordSignupHolder.getEditText().getText().toString().trim();
 
@@ -68,6 +69,22 @@ public class SignupActivity extends AppCompatActivity {
                 return;
             } else {
                 emailSignupHolder.setError(null);
+            }
+
+            if (phone.isEmpty()) {
+                phoneNumberHolder.setError("Phone number is required!");
+                phoneNumberHolder.requestFocus();
+                return;
+            } else {
+                phoneNumberHolder.setError(null);
+            }
+
+            if (!Patterns.PHONE.matcher(phone).matches()) {
+                phoneNumberHolder.setError("Check format of the given phone number!");
+                phoneNumberHolder.requestFocus();
+                return;
+            } else {
+                phoneNumberHolder.setError(null);
             }
 
             if (password.isEmpty()) {
@@ -106,7 +123,7 @@ public class SignupActivity extends AppCompatActivity {
 
             authentication.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    User user = new User(name, email);
+                    User user = new User(name, email, phone, "Add your address here", "", "");
                     FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful()) {
                             Toast.makeText(SignupActivity.this, "Successfully registered as " + name, Toast.LENGTH_LONG).show();
@@ -125,7 +142,7 @@ public class SignupActivity extends AppCompatActivity {
             });
         });
 
-        Stol.setOnClickListener(view -> {
+        stol.setOnClickListener(view -> {
             Intent i = new Intent(SignupActivity.this, LoginActivity.class);
             finish();
             startActivity(i);

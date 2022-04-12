@@ -16,4 +16,23 @@
     <string name="reset_password">Reset Password</string>
     <string name="want_to_go_back">Want to go back?</string>
     <string name="send_mail">Send mail</string>
+    <string name="account">Account</string>
+    <string name="logout">Logout</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="name">Name</string>
+    <string name="events">EVENTS</string>
+    <string name="hosted">Hosted</string>
+    <string name="_12">12</string>
+    <string name="attended">Attended</string>
+    <string name="phone_number">Phone number</string>
+    <string name="address">Address</string>
+    <string name="edit_details">Edit details</string>
+    <string name="refresh">Refresh</string>
+    <string name="street_and_unit">Street and Unit</string>
+    <string name="city_and_state">City and State</string>
+    <string name="pincode">Pincode</string>
+    <string name="change_photo">Change photo</string>
+    <string name="address1">Address:</string>
+    <string name="cancel">Cancel</string>
+    <string name="update">Update</string>
 </resources>

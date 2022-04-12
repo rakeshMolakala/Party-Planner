@@ -1,7 +1,6 @@
 package com.example.partyplanner;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -20,8 +18,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     private TextInputLayout emailLoginHolder, passwordLoginHolder;
-    private TextView ltoS, forgotPassword;
-    private Button login;
     private ProgressBar progressbar;
     private FirebaseAuth authentication;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -35,9 +31,9 @@ public class LoginActivity extends AppCompatActivity {
         authentication = FirebaseAuth.getInstance();
         emailLoginHolder = findViewById(R.id.emailLoginHolder);
         passwordLoginHolder = findViewById(R.id.passwordLoginHolder);
-        login = findViewById(R.id.login);
-        ltoS = findViewById(R.id.loginToSignup);
-        forgotPassword = findViewById(R.id.forgotPassword);
+        Button login = findViewById(R.id.login);
+        TextView ltoS = findViewById(R.id.loginToSignup);
+        TextView forgotPassword = findViewById(R.id.forgotPassword);
         progressbar = findViewById(R.id.progressbarLogin);
 
         login.setOnClickListener(view -> {
@@ -82,11 +78,15 @@ public class LoginActivity extends AppCompatActivity {
             authentication.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    if (user.isEmailVerified()) {
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    if (user != null) {
+                        if (user.isEmailVerified()) {
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        } else {
+                            user.sendEmailVerification();
+                            Toast.makeText(LoginActivity.this, "Please check your email to verify your account!", Toast.LENGTH_LONG).show();
+                        }
                     } else {
-                        user.sendEmailVerification();
-                        Toast.makeText(LoginActivity.this, "Please check your email to verify your account!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "Please try again later.", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     Toast.makeText(LoginActivity.this, "Failed to login! Check credentials.", Toast.LENGTH_LONG).show();
@@ -101,10 +101,12 @@ public class LoginActivity extends AppCompatActivity {
 
         authStateListener = firebaseAuth -> {
             if (firebaseAuth.getCurrentUser() != null) {
-                Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                finish();
-                LoginActivity.this.startActivity(i);
-                LoginActivity.this.overridePendingTransition(0, 0);
+                if (firebaseAuth.getCurrentUser().isEmailVerified()) {
+                    Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                    finish();
+                    LoginActivity.this.startActivity(i);
+                    LoginActivity.this.overridePendingTransition(0, 0);
+                }
             }
         };
     }

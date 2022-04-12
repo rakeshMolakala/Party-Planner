@@ -26,16 +26,16 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/design"
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/top_background" />
+                app:srcCompat="@drawable/background_2_login2" />
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="24dp"
                 android:text="@string/party_planner"
                 android:textAlignment="center"
-                android:textColor="#7500DB"
+                android:textColor="#A846F4"
                 android:textSize="50sp"
                 android:textStyle="bold" />
 
@@ -60,9 +60,9 @@
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
                 app:endIconMode="clear_text"
-                app:endIconTint="#7500DB"
+                app:endIconTint="#A846F4"
                 app:startIconDrawable="@drawable/email"
-                app:startIconTint="#7500DB">
+                app:startIconTint="#A846F4">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emailLogin"
@@ -89,9 +89,9 @@
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
                 app:passwordToggleEnabled="true"
-                app:passwordToggleTint="#7500DB"
+                app:passwordToggleTint="#A846F4"
                 app:startIconDrawable="@drawable/password"
-                app:startIconTint="#7500DB">
+                app:startIconTint="#A846F4">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/passwordLogin"
@@ -112,7 +112,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="32dp"
-                android:backgroundTint="#7500DB"
+                android:backgroundTint="#A846F4"
                 android:text="@string/login"
                 android:textColor="@color/white"
                 android:textSize="28sp"
@@ -165,7 +165,7 @@
                     android:layout_marginEnd="32dp"
                     android:layout_weight="1"
                     android:text="@string/sign_up"
-                    android:textColor="#7500DB"
+                    android:textColor="#A846F4"
                     android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -180,7 +180,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:indeterminate="true"
-        android:indeterminateTint="#7500DB"
+        android:indeterminateTint="#A846F4"
         android:indeterminateTintMode="src_atop"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
