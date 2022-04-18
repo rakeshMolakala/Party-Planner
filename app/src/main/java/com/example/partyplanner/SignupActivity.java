@@ -123,7 +123,7 @@ public class SignupActivity extends AppCompatActivity {
 
             authentication.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    User user = new User(name, email, phone, "Add your address here", "", "");
+                    User user = new User(name, email, phone, "", "", "");
                     FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful()) {
                             Toast.makeText(SignupActivity.this, "Successfully registered as " + name, Toast.LENGTH_LONG).show();

@@ -11,6 +11,7 @@
         <entry key="app/src/main/res/drawable/chat.xml" value="0.2225" />
         <entry key="app/src/main/res/drawable/circle.xml" value="0.165" />
         <entry key="app/src/main/res/drawable/city.xml" value="0.171" />
+        <entry key="app/src/main/res/drawable/delete.xml" value="0.171" />
         <entry key="app/src/main/res/drawable/edit.xml" value="0.165" />
         <entry key="app/src/main/res/drawable/editbutton_back.xml" value="0.2225" />
         <entry key="app/src/main/res/drawable/edittext_back.xml" value="0.2225" />
@@ -36,10 +37,12 @@
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.2796610169491525" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.29583333333333334" />
         <entry key="app/src/main/res/layout/activity_profilepicture.xml" value="0.19628286491387126" />
+        <entry key="app/src/main/res/layout/activity_request_list_item.xml" value="0.19628286491387126" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.2958099365234375" />
-        <entry key="app/src/main/res/layout/fragment_account.xml" value="0.32345428466796877" />
+        <entry key="app/src/main/res/layout/fragment_account.xml" value="0.19045257568359375" />
         <entry key="app/src/main/res/layout/fragment_chat.xml" value="0.19628286491387126" />
         <entry key="app/src/main/res/layout/fragment_events.xml" value="0.19628286491387126" />
+        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.19628286491387126" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.19628286491387126" />
         <entry key="app/src/main/res/layout/fragment_todo.xml" value="0.19628286491387126" />
         <entry key="app/src/main/res/layout/hh.xml" value="0.33765017744423687" />

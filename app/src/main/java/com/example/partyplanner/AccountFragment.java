@@ -1,5 +1,7 @@
 package com.example.partyplanner;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -46,6 +48,7 @@ public class AccountFragment extends Fragment {
         addressLine3Account = viewGroup.findViewById(R.id.addressLine3Account);
         LinearLayout logout = viewGroup.findViewById(R.id.logout);
         Button editDetails = viewGroup.findViewById(R.id.editDetails);
+        Button deleteAccount = viewGroup.findViewById(R.id.deleteAccount);
         ImageView profilePicture = viewGroup.findViewById(R.id.profilePicture);
         progressbar = viewGroup.findViewById(R.id.progressbarLogout);
 
@@ -93,6 +96,32 @@ public class AccountFragment extends Fragment {
             AccountFragment.this.getActivity().startActivity(i);
             progressbar.setVisibility(View.GONE);
             Toast.makeText(AccountFragment.this.getActivity(), "Successfully logged out!", Toast.LENGTH_SHORT).show();
+        });
+
+        deleteAccount.setOnClickListener(view -> {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(AccountFragment.this.getActivity());
+            dialog.setTitle("Are you sure?");
+            dialog.setMessage("Deleting this account will result in completely removing your account from the system and you won't be able to recover it later.");
+            dialog.setPositiveButton("Delete", (dialogInterface, i) -> firebaseUser.delete().addOnCompleteListener(task -> {
+                progressbar.setVisibility(View.VISIBLE);
+                if (task.isSuccessful()) {
+                    progressbar.setVisibility(View.GONE);
+                    Toast.makeText(AccountFragment.this.getActivity(), "Account permanently deleted!!!", Toast.LENGTH_LONG).show();
+                    Intent i1 = new Intent(AccountFragment.this.getActivity(), LoginActivity.class);
+                    getActivity().finish();
+                    i1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    AccountFragment.this.requireActivity().startActivity(i1);
+                } else {
+                    Toast.makeText(AccountFragment.this.getActivity(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }));
+            dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            dialog.create().show();
         });
 
         return viewGroup;
