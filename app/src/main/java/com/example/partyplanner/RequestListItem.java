@@ -9,6 +9,10 @@ public class RequestListItem extends AppCompatActivity implements RequestItemLis
 
     private final String userName;
 
+    public RequestListItem() {
+        this.userName=null;
+    }
+
     public RequestListItem(String userName) {
         this.userName = userName;
     }
