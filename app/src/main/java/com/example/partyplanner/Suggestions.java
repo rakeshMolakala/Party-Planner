@@ -1,36 +1,31 @@
 package com.example.partyplanner;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
-public class FirstFragment extends Fragment {
+public class Suggestions extends Fragment {
     private final ArrayList<RequestListItem> linkItemCardArrayList = new ArrayList<>();
     private RecyclerView linkCollectorRecyclerView;
     private RequestViewAdapter itemviewAdapter;
@@ -43,7 +38,6 @@ public class FirstFragment extends Fragment {
         linkCollectorRecyclerView =  viewGroup.findViewById(R.id.links_view);
         progressBar = viewGroup.findViewById(R.id.progressBar);
         init(viewGroup);
-        //new FriendSuggestionWorker(viewGroup).execute();
         return viewGroup;
     }
 
@@ -52,25 +46,22 @@ public class FirstFragment extends Fragment {
         createRecyclerView(container);
     }
 
+    private String cleanEmail(String email) {
+        return email.replaceAll("\\.", ",");
+    }
+
     private void initialItemData() {
         progressBar.setVisibility(View.VISIBLE);
         FirebaseAuth authentication = FirebaseAuth.getInstance();
         String firebaseUserEmail = authentication.getCurrentUser().getEmail();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference dataSnapshot = reference.child("Users");
-//        DatabaseReference userRef = mDatabase.child("Users");
-//        mDatabase = FirebaseDatabase.getInstance().getReference();
-//        DatabaseReference userRef = mDatabase.child("Users");
-//        authentication = FirebaseAuth.getInstance();
-//        firebaseUser = authentication.getCurrentUser();
-        //String userId = authentication.getCurrentUser().getUid();
         final int[] usersCount = new int[1];
 
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
              usersCount[0] = (int) snapshot.getChildrenCount();
-             //Log.d("mytag, num of users", String.valueOf(usersCount[0]));
             }
 
             @Override
@@ -100,74 +91,57 @@ public class FirstFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 User user = snapshot.getValue(User.class);
-                //Log.d("95", user.toString());
                 String name = user.username;
                 String email = user.email;
-
+                Map<String, String> friendsList = user.friendsList;
                 List<String> requestSentList = user.requestsSent;
-
                 List<String> requestReceivedList = user.requestsReceived;
                 String requestStatus = "Add Friend";
-                if (requestSentList.contains(firebaseUserEmail.toString())) {
-                    requestStatus = "Request Received";
-                }
-                if (requestReceivedList.contains(firebaseUserEmail.toString())) {
+
+                if (requestReceivedList.size() > 0 && requestReceivedList.contains(firebaseUserEmail)) {
                     requestStatus = "Request Sent";
                 }
 
-                if (!email.equals(firebaseUserEmail)) {
-                    //Log.d("ff107", firebaseUserEmail);
-                    RequestListItem itemCard = new RequestListItem(name, requestStatus, user.email);
-                    linkItemCardArrayList.add(itemCard);
-                    itemviewAdapter.notifyItemInserted(0);
+                if (email.equals(firebaseUserEmail)) {
+                    usersCount[0] = usersCount[0] - requestReceivedList.size() - friendsList.size();
                 }
-//                Log.d("mytag, size of list", String.valueOf(linkItemCardArrayList.size()));
-//                Log.d("mytag, user count", String.valueOf(usersCount[0]));
+
+                String cleanEmail = cleanEmail(firebaseUserEmail);
+                if (!email.equals(firebaseUserEmail)) {
+                    if (requestSentList.size() > 0 && !requestSentList.contains(firebaseUserEmail)) {
+                        if (friendsList.size() > 0 && !friendsList.containsKey(cleanEmail)) {
+                            RequestListItem itemCard = new RequestListItem(name, requestStatus, user.email);
+                            linkItemCardArrayList.add(itemCard);
+                            itemviewAdapter.notifyItemInserted(0);
+                        }
+                    }
+                }
+
                 if (linkItemCardArrayList.size() >= usersCount[0]-1) {
-                    //Log.d("mytag", "In 103 if loop");
                    progressBar.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                //Log.d("133", snapshot.getValue(User.class).toString());
                 User user = snapshot.getValue(User.class);
                 String name = user.username;
                 String email = user.email;
                 List<String> requestReceivedList = user.requestsReceived;
                 String requestStatus = "Add Friend";
                 if (requestReceivedList.contains(firebaseUserEmail)) {
-                    //Log.d("1332", "In if condition");
                     requestStatus = "Request Sent";
-                    //Log.d("1332", requestStatus);
                 }
 
                 if (!email.equals(firebaseUserEmail)) {
-//                    Log.d("ff107", firebaseUserEmail);
-//                    Log.d("1333", requestStatus);
-
-                    //linkItemCardArrayList.remove();
-                    //RequestListItem itemCard = new RequestListItem(name, requestStatus, user.email);
                     RequestListItem currObj = new RequestListItem(name, "Add Friend", user.email);
                     int indexOf = 0;
                     if (linkItemCardArrayList.contains(currObj)) {
                         indexOf = linkItemCardArrayList.indexOf(currObj);
-                        //Log.d("1334", String.valueOf(indexOf));
                         linkItemCardArrayList.set(indexOf, new RequestListItem(name, requestStatus, user.email));
                     }
-                    //linkItemCardArrayList.add(new RequestListItem(name, requestStatus, user.email));
-
-                    //itemviewAdapter.notifyItemInserted(0);
                     itemviewAdapter.notifyItemChanged(indexOf);
                 }
-//                Log.d("mytag, size of list", String.valueOf(linkItemCardArrayList.size()));
-//                Log.d("mytag, user count", String.valueOf(usersCount[0]));
-//                if (linkItemCardArrayList.size() >= usersCount[0]-1) {
-//                    Log.d("mytag", "In 103 if loop");
-//                    //progressBar.setVisibility(View.GONE);
-//                }
-
             }
 
             @Override
@@ -196,6 +170,9 @@ public class FirstFragment extends Fragment {
             @Override
             public void onRequestItemClick(int position, String userName, String userEmail,
                                            String requestStatus, Context context) {
+                if(requestStatus.equals("Request Sent")) {
+                   return;
+                }
                 linkItemCardArrayList.get(position).onRequestItemClick(position, userName, userEmail,
                         requestStatus,
                         context);
