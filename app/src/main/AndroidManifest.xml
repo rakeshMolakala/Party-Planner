@@ -18,6 +18,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Partyplanner">
         <activity
+            android:name=".ChatWindowActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatTabItem"
+            android:exported="false" />
+        <activity
             android:name=".RequestListItem"
             android:exported="false" />
         <activity

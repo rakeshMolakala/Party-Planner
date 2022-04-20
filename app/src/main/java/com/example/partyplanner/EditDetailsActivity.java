@@ -32,12 +32,18 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+import java.util.Map;
+
 public class EditDetailsActivity extends AppCompatActivity {
     ImageView editPhoto;
     TextInputLayout usernameUpdateHolder, phoneNumberUpdateHolder, addressLine1Holder, addressLine2Holder, addressLine3Holder;
     TextView changePhoto;
     Button cancel, update;
     ProgressBar progressbarUpdate;
+    List<String> requestsSent;
+    List<String> requestsReceived;
+    Map<String, String> friendsList;
 
     private DatabaseReference databaseReference;
     private FirebaseAuth authentication;
@@ -84,6 +90,10 @@ public class EditDetailsActivity extends AppCompatActivity {
                         addressLine1Holder.getEditText().setText(details.addressLine1);
                         addressLine2Holder.getEditText().setText(details.addressLine2);
                         addressLine3Holder.getEditText().setText(details.addressLine3);
+                        requestsReceived = details.requestsReceived;
+                        requestsSent = details.requestsSent;
+                        friendsList = details.friendsList;
+
                     } else {
                         Toast.makeText(EditDetailsActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
                     }
@@ -165,7 +175,8 @@ public class EditDetailsActivity extends AppCompatActivity {
             }
 
             progressbarUpdate.setVisibility(View.VISIBLE);
-            User user = new User(name, firebaseUser.getEmail(), phone, address1, address2, address3);
+            User user = new User(name, firebaseUser.getEmail(), phone, address1, address2, address3,
+                    requestsReceived, requestsSent, friendsList);
             String userId = firebaseUser.getUid();
             if (uri != null) {
                 StorageReference storageReference1 = storageReference.child(userId + "." + getFilesExtension(uri));

@@ -32,6 +32,8 @@ public class RequestViewAdapter extends RecyclerView.Adapter<RequestViewHolder> 
     public void onBindViewHolder(@NonNull RequestViewHolder holder, int position) {
         RequestListItem currentItem = itemList.get(position);
         holder.userName.setText(currentItem.getUserName());
+        holder.email.setText(currentItem.getUserEmail());
+        holder.requestStatus.setText(currentItem.getRequestStatus());
     }
 
     @Override

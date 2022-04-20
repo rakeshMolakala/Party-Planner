@@ -17,6 +17,11 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class SignupActivity extends AppCompatActivity {
     private TextInputLayout usernameHolder, emailSignupHolder, phoneNumberHolder, passwordSignupHolder, rePasswordSignupHolder;
     private ProgressBar progressbar;
@@ -123,7 +128,12 @@ public class SignupActivity extends AppCompatActivity {
 
             authentication.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    User user = new User(name, email, phone, "Add your address here", "", "");
+                    List<String> requestsReceived = Collections.singletonList("");
+                    List<String> requestsSent = Collections.singletonList("");
+                    Map<String, String> friendsList = new HashMap<>();
+                    friendsList.put("dummy", " ");
+                    User user = new User(name, email, phone, "Add your address here", "", "",
+                            requestsReceived, requestsSent, friendsList);
                     FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful()) {
                             Toast.makeText(SignupActivity.this, "Successfully registered as " + name, Toast.LENGTH_LONG).show();

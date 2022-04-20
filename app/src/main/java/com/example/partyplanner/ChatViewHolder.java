@@ -1,20 +1,23 @@
+
 package com.example.partyplanner;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RequestViewHolder extends RecyclerView.ViewHolder {
+public class ChatViewHolder extends RecyclerView.ViewHolder {
     public TextView userName;
     public TextView email;
-    public TextView requestStatus;
+    public ImageView profilePicture;
 
-    public RequestViewHolder(View itemView, final RequestItemListener listener) {
+    public ChatViewHolder(View itemView, final ChatItemListener listener) {
         super(itemView);
-        userName = itemView.findViewById(R.id.user_name);
+        userName = itemView.findViewById(R.id.username);
         email = itemView.findViewById(R.id.email);
-        requestStatus = itemView.findViewById(R.id.request_status);
+        profilePicture = itemView.findViewById(R.id.profilePicture);
+
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -22,9 +25,8 @@ public class RequestViewHolder extends RecyclerView.ViewHolder {
                 if (listener != null) {
                     int position = getLayoutPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        listener.onRequestItemClick(position, userName.getText().toString(),
+                        listener.onChatItemClick(position, userName.getText().toString(),
                                 email.getText().toString(),
-                                requestStatus.getText().toString(),
                                 itemView.getContext());
                     }
                 }
