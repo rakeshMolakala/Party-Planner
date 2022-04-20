@@ -1,10 +1,9 @@
 package com.example.partyplanner;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,13 +30,25 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 public class AccountFragment extends Fragment {
-    private TextView accountName, emailAccount, phoneNumberAccount, addressLine1Account, addressLine2Account, addressLine3Account;
+    private TextView accountName;
+    private TextView emailAccount;
+    private TextView phoneNumberAccount;
+    private TextView addressLine1Account;
+    private TextView addressLine2Account;
+    private TextView addressLine3Account;
     private ProgressBar progressbar;
+    private ViewGroup viewGroup;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_account, container, false);
+        viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_account, container, false);
+        return viewGroup;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
 
         FirebaseAuth authentication = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = authentication.getCurrentUser();
@@ -46,9 +59,9 @@ public class AccountFragment extends Fragment {
         addressLine1Account = viewGroup.findViewById(R.id.addressLine1Account);
         addressLine2Account = viewGroup.findViewById(R.id.addressLine2Account);
         addressLine3Account = viewGroup.findViewById(R.id.addressLine3Account);
+        TextView preferencesEdit = viewGroup.findViewById(R.id.preferencesEdit);
         LinearLayout logout = viewGroup.findViewById(R.id.logout);
         Button editDetails = viewGroup.findViewById(R.id.editDetails);
-        Button deleteAccount = viewGroup.findViewById(R.id.deleteAccount);
         ImageView profilePicture = viewGroup.findViewById(R.id.profilePicture);
         progressbar = viewGroup.findViewById(R.id.progressbarLogout);
 
@@ -57,8 +70,6 @@ public class AccountFragment extends Fragment {
             Toast.makeText(AccountFragment.this.getActivity(), "Something went wrong! Your credentials are not available at the moment", Toast.LENGTH_LONG).show();
             progressbar.setVisibility(View.GONE);
         } else {
-            Uri uri = firebaseUser.getPhotoUrl();
-            Picasso.with(AccountFragment.this.getActivity()).load(uri).into(profilePicture);
             String userId = firebaseUser.getUid();
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users");
             reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -66,12 +77,13 @@ public class AccountFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     User details = snapshot.getValue(User.class);
                     if (details != null) {
+                        Picasso.with(AccountFragment.this.getActivity()).load(Uri.parse(details.profileImage)).into(profilePicture);
                         accountName.setText(details.username);
                         emailAccount.setText(firebaseUser.getEmail());
                         phoneNumberAccount.setText(details.number);
-                        addressLine1Account.setText(details.addressLine1);
-                        addressLine2Account.setText(details.addressLine2);
-                        addressLine3Account.setText(details.addressLine3);
+                        addressLine1Account.setText(details.address.get(0));
+                        addressLine2Account.setText(details.address.get(1));
+                        addressLine3Account.setText(details.address.get(2));
                     }
                     progressbar.setVisibility(View.GONE);
                 }
@@ -88,6 +100,8 @@ public class AccountFragment extends Fragment {
 
         editDetails.setOnClickListener(view -> startActivity(new Intent(AccountFragment.this.getActivity(), EditDetailsActivity.class)));
 
+        preferencesEdit.setOnClickListener(view -> startActivity(new Intent(AccountFragment.this.getActivity(), PreferencesActivity.class)));
+
         logout.setOnClickListener(view -> {
             progressbar.setVisibility(View.VISIBLE);
             FirebaseAuth.getInstance().signOut();
@@ -97,33 +111,5 @@ public class AccountFragment extends Fragment {
             progressbar.setVisibility(View.GONE);
             Toast.makeText(AccountFragment.this.getActivity(), "Successfully logged out!", Toast.LENGTH_SHORT).show();
         });
-
-        deleteAccount.setOnClickListener(view -> {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(AccountFragment.this.getActivity());
-            dialog.setTitle("Are you sure?");
-            dialog.setMessage("Deleting this account will result in completely removing your account from the system and you won't be able to recover it later.");
-            dialog.setPositiveButton("Delete", (dialogInterface, i) -> firebaseUser.delete().addOnCompleteListener(task -> {
-                progressbar.setVisibility(View.VISIBLE);
-                if (task.isSuccessful()) {
-                    progressbar.setVisibility(View.GONE);
-                    Toast.makeText(AccountFragment.this.getActivity(), "Account permanently deleted!!!", Toast.LENGTH_LONG).show();
-                    Intent i1 = new Intent(AccountFragment.this.getActivity(), LoginActivity.class);
-                    getActivity().finish();
-                    i1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    AccountFragment.this.requireActivity().startActivity(i1);
-                } else {
-                    Toast.makeText(AccountFragment.this.getActivity(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }));
-            dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            });
-            dialog.create().show();
-        });
-
-        return viewGroup;
     }
 }

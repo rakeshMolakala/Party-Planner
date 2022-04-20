@@ -68,7 +68,7 @@ public class FirstFragment extends Fragment {
 //        init(savedInstanceState);
 //
 //        //Specify what action a specific gesture performs, in this case swiping right or left deletes the entry
-//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+//        ItemTouchHelperCall itemTouchHelper = new ItemTouchHelperCall(new ItemTouchHelperCall.SimpleCallback(0, ItemTouchHelperCall.LEFT | ItemTouchHelperCall.RIGHT) {
 //            @Override
 //            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
 //                return false;
