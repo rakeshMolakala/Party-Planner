@@ -36,6 +36,7 @@ public class RequestListItem extends AppCompatActivity implements RequestItemLis
     private String userId;
     private DatabaseReference userRef;
 
+
     public RequestListItem(String userName, String requestStatus, String userEmail) {
         this.userName = userName;
         this.requestStatus = requestStatus;
