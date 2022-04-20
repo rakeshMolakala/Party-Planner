@@ -24,6 +24,12 @@
             android:configChanges="orientation|screenSize"
             android:exported="false" />
         <activity
+            android:name=".ChatWindowActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatTabItem"
+            android:exported="false" />
+        <activity
             android:name=".RequestListItem"
             android:configChanges="orientation|screenSize"
             android:exported="false"

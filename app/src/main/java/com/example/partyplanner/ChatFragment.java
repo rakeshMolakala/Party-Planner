@@ -50,7 +50,7 @@ public class ChatFragment extends Fragment {
 
     public class PagerAdapter extends FragmentStatePagerAdapter {
         int mNumOfTabs;
-        private String[] tabTitles = new String[]{"Friend Suggestions", "Chats"};
+        private String[] tabTitles = new String[]{"Chats", "Requests", "Suggestions"};
 
         public PagerAdapter(FragmentManager fm, int NumOfTabs) {
             super(fm);
@@ -67,11 +67,11 @@ public class ChatFragment extends Fragment {
 
             switch (position) {
                 case 0:
-                    return new FirstFragment();
+                    return new ChatTabFragment();
                 case 1:
-                    return new FirstFragment();
+                    return new RequestsFragment();
                 case 2:
-                    return new FirstFragment();
+                    return new Suggestions();
 
                 default:
                     return null;
