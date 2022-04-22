@@ -139,32 +139,40 @@ public class EditDetailsActivity extends AppCompatActivity {
                 usernameUpdateHolder.setError(null);
             }
 
-            if (address1.isEmpty()) {
-                addressLine1Holder.setError("Street and unit number is required!");
-                addressLine1Holder.requestFocus();
-                return;
-            } else {
-                addressLine1Holder.setError(null);
-            }
-
-            if (address2.isEmpty()) {
-                addressLine2Holder.setError("City and State is required!");
-                addressLine2Holder.requestFocus();
-                return;
-            } else {
-                addressLine2Holder.setError(null);
-            }
-
-            if (address3.isEmpty()) {
-                addressLine3Holder.setError("Pin is required!");
-                addressLine3Holder.requestFocus();
-                return;
-            } else {
-                addressLine3Holder.setError(null);
-            }
+//            if (address1.isEmpty()) {
+//                addressLine1Holder.setError("Street and unit number is required!");
+//                addressLine1Holder.requestFocus();
+//                return;
+//            } else {
+//                addressLine1Holder.setError(null);
+//            }
+//
+//            if (address2.isEmpty()) {
+//                addressLine2Holder.setError("City and State is required!");
+//                addressLine2Holder.requestFocus();
+//                return;
+//            } else {
+//                addressLine2Holder.setError(null);
+//            }
+//
+//            if (address3.isEmpty()) {
+//                addressLine3Holder.setError("Pin is required!");
+//                addressLine3Holder.requestFocus();
+//                return;
+//            } else {
+//                addressLine3Holder.setError(null);
+//            }
 
             if (phone.isEmpty()) {
                 phoneNumberUpdateHolder.setError("Phone number is required!");
+                phoneNumberUpdateHolder.requestFocus();
+                return;
+            } else {
+                phoneNumberUpdateHolder.setError(null);
+            }
+
+            if (phone.length() < 10) {
+                phoneNumberUpdateHolder.setError("Phone number must consist of atleast 10 digits!");
                 phoneNumberUpdateHolder.requestFocus();
                 return;
             } else {

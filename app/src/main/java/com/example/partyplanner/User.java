@@ -1,6 +1,5 @@
 package com.example.partyplanner;
 
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 

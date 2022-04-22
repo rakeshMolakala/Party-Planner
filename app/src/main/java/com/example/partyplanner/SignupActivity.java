@@ -99,6 +99,14 @@ public class SignupActivity extends AppCompatActivity {
                 phoneNumberHolder.setError(null);
             }
 
+            if (phone.length() < 10) {
+                phoneNumberHolder.setError("Phone number must consist of atleast 10 digits!");
+                phoneNumberHolder.requestFocus();
+                return;
+            } else {
+                phoneNumberHolder.setError(null);
+            }
+
             if (!Patterns.PHONE.matcher(phone).matches()) {
                 phoneNumberHolder.setError("Check format of the given phone number!");
                 phoneNumberHolder.requestFocus();
