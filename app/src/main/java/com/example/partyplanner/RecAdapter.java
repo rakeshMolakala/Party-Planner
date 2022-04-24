@@ -1,14 +1,21 @@
 package com.example.partyplanner;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder>{
@@ -34,6 +41,13 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder>{
         holder.recName.setText(item.getRecName());
         holder.recVenue.setText(item.getRecVenue());
         holder.recTime.setText(item.getRecTime());
+
+        holder.chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override
@@ -46,12 +60,14 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder>{
         public TextView recName;
         public TextView recVenue;
         public TextView recTime;
+        public Button chat;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             recName = (TextView) itemView.findViewById(R.id.recEventName);
             recVenue = (TextView) itemView.findViewById(R.id.recEventVenue);
             recTime = (TextView) itemView.findViewById(R.id.recEventTime);
+            chat = itemView.findViewById(R.id.chat);
         }
     }
 }
