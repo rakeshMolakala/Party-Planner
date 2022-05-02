@@ -17,15 +17,22 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity {
+    List<String> requestsReceived, requestsSent, address, foods, drinks;
+    List<List<String>> preferences;
+    Map<String, String> friendsList = new HashMap<>();
     private TextInputLayout usernameHolder, emailSignupHolder, phoneNumberHolder, passwordSignupHolder, rePasswordSignupHolder;
     private ProgressBar progressbar;
     private FirebaseAuth authentication;
+    private String profilePhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +48,14 @@ public class SignupActivity extends AppCompatActivity {
         rePasswordSignupHolder = findViewById(R.id.rePasswordSignupHolder);
         TextView stol = findViewById(R.id.SignupToLogin);
         Button signup = findViewById(R.id.signup);
+        requestsReceived = Collections.singletonList("");
+        requestsSent = Collections.singletonList("");
+        address = new ArrayList<>(Arrays.asList("", "", ""));
+        foods = new ArrayList<>(Arrays.asList("Food 1", "Food 2", "Food 3"));
+        drinks = new ArrayList<>(Arrays.asList("Drink 1", "Drink 2", "Drink 3"));
+        preferences = new ArrayList<>(Arrays.asList(foods, drinks));
+        friendsList.put("dummy", " ");
+        profilePhoto = "\"jkh\"";
         progressbar = findViewById(R.id.progressbarSignup);
 
         signup.setOnClickListener(view -> {
@@ -78,6 +93,14 @@ public class SignupActivity extends AppCompatActivity {
 
             if (phone.isEmpty()) {
                 phoneNumberHolder.setError("Phone number is required!");
+                phoneNumberHolder.requestFocus();
+                return;
+            } else {
+                phoneNumberHolder.setError(null);
+            }
+
+            if (phone.length() < 10) {
+                phoneNumberHolder.setError("Phone number must consist of atleast 10 digits!");
                 phoneNumberHolder.requestFocus();
                 return;
             } else {
@@ -125,15 +148,10 @@ public class SignupActivity extends AppCompatActivity {
             }
 
             progressbar.setVisibility(View.VISIBLE);
-
             authentication.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    List<String> requestsReceived = Collections.singletonList("");
-                    List<String> requestsSent = Collections.singletonList("");
-                    Map<String, String> friendsList = new HashMap<>();
-                    friendsList.put("dummy", " ");
-                    User user = new User(name, email, phone, "Add your address here", "", "",
-                            requestsReceived, requestsSent, friendsList);
+                    User user = new User(name, email, phone, address,
+                            requestsReceived, requestsSent, preferences, friendsList, profilePhoto);
                     FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful()) {
                             Toast.makeText(SignupActivity.this, "Successfully registered as " + name, Toast.LENGTH_LONG).show();

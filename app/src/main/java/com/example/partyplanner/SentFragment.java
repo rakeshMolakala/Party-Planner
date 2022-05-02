@@ -23,48 +23,45 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SentFragment extends Fragment {
 
     ArrayList<SentItem> sentList;
     SentAdapter sentAdapter;
+    Map<String ,List<String>> inviteesMap;
+    Map<Integer,String> inviteesMap2;
+    int  c = 0;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sentList = new ArrayList<>();
+        inviteesMap =  new HashMap<>();
+        inviteesMap2 =  new HashMap<>();
         View v = inflater.inflate(R.layout.fragment_sent, container, false);
         FirebaseAuth authentication = FirebaseAuth.getInstance();
         String firebaseUserEmail = authentication.getCurrentUser().getEmail();
         RecyclerView recyclerView = v.findViewById(R.id.sentRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
 
-
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
         DatabaseReference dataSnapshot = reference.child("Events");
         dataSnapshot.addChildEventListener(new ChildEventListener() {
-
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                String eventName = snapshot.getKey();
                 String host = snapshot.child("host").getValue().toString();
-                Log.d("100",firebaseUserEmail);
-                Log.d("101",host);
 
-//                Button inviteButton = v.findViewById(R.id.editButton);
-//                inviteButton.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        Intent intent = new Intent(getActivity(), Invite.class);
-//                        Bundle extras = new Bundle();
-//                        Object invitees = snapshot.child("invitees").getValue();
-//                        List<String> inviteesList = (List<String>) invitees;
-//                        extras.putStringArrayList("invitees",(ArrayList<String>) inviteesList);
-//                        intent.putExtras(extras);
-//                        startActivity(intent);
-//                    }
-//                });
+
+                Object invitees = snapshot.child("invitees").getValue();
+                inviteesMap.put(eventName,(List<String>) invitees);
+                inviteesMap2.put(c,eventName);
+                c++;
                 if(host.equals(firebaseUserEmail)){
                     Log.d("100",firebaseUserEmail);
                     String name = snapshot.child("name").getValue().toString();
@@ -72,9 +69,19 @@ public class SentFragment extends Fragment {
                     String time = snapshot.child("time").getValue().toString();
                     sentList.add(new SentItem(name,venue,time));
                 }
-                sentAdapter = new SentAdapter(sentList, getContext().getApplicationContext());
+
+                Log.d("1234Map",inviteesMap.toString());
+                Log.d("1234EventName",eventName);
+
+                sentAdapter = new SentAdapter(sentList, getContext(),inviteesMap,inviteesMap2);
                 recyclerView.setAdapter(sentAdapter);
+
+                if(sentList.size()>0){
+                    Log.d("200",""+sentAdapter.getEditId(0));
+                }
+
             }
+
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -97,6 +104,7 @@ public class SentFragment extends Fragment {
             }
 
         });
+
         return v;
 
     }

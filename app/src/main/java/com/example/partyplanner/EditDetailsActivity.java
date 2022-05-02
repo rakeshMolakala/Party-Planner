@@ -1,5 +1,6 @@
 package com.example.partyplanner;
 
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
@@ -32,6 +33,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -39,10 +42,10 @@ public class EditDetailsActivity extends AppCompatActivity {
     ImageView editPhoto;
     TextInputLayout usernameUpdateHolder, phoneNumberUpdateHolder, addressLine1Holder, addressLine2Holder, addressLine3Holder;
     TextView changePhoto;
-    Button cancel, update;
+    Button cancel, update, deleteAccount;
     ProgressBar progressbarUpdate;
-    List<String> requestsSent;
-    List<String> requestsReceived;
+    List<String> requestsSent, requestsReceived, address;
+    List<List<String>> preferences;
     Map<String, String> friendsList;
 
     private DatabaseReference databaseReference;
@@ -71,6 +74,8 @@ public class EditDetailsActivity extends AppCompatActivity {
         editPhoto = findViewById(R.id.editPhoto);
         cancel = findViewById(R.id.cancelEdit);
         update = findViewById(R.id.updateEdit);
+        address = new ArrayList<>();
+        deleteAccount = findViewById(R.id.deleteAccount);
         progressbarUpdate = findViewById(R.id.progressbarUpdate);
 
         if (firebaseUser == null) {
@@ -87,13 +92,13 @@ public class EditDetailsActivity extends AppCompatActivity {
                     if (details != null) {
                         usernameUpdateHolder.getEditText().setText(details.username);
                         phoneNumberUpdateHolder.getEditText().setText(details.number);
-                        addressLine1Holder.getEditText().setText(details.addressLine1);
-                        addressLine2Holder.getEditText().setText(details.addressLine2);
-                        addressLine3Holder.getEditText().setText(details.addressLine3);
+                        addressLine1Holder.getEditText().setText(details.address.get(0));
+                        addressLine2Holder.getEditText().setText(details.address.get(1));
+                        addressLine3Holder.getEditText().setText(details.address.get(2));
                         requestsReceived = details.requestsReceived;
                         requestsSent = details.requestsSent;
+                        preferences = details.preferences;
                         friendsList = details.friendsList;
-
                     } else {
                         Toast.makeText(EditDetailsActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
                     }
@@ -134,32 +139,40 @@ public class EditDetailsActivity extends AppCompatActivity {
                 usernameUpdateHolder.setError(null);
             }
 
-            if (address1.isEmpty()) {
-                addressLine1Holder.setError("Street and unit number is required!");
-                addressLine1Holder.requestFocus();
-                return;
-            } else {
-                addressLine1Holder.setError(null);
-            }
-
-            if (address2.isEmpty()) {
-                addressLine2Holder.setError("City and State is required!");
-                addressLine2Holder.requestFocus();
-                return;
-            } else {
-                addressLine2Holder.setError(null);
-            }
-
-            if (address3.isEmpty()) {
-                addressLine3Holder.setError("Pin is required!");
-                addressLine3Holder.requestFocus();
-                return;
-            } else {
-                addressLine3Holder.setError(null);
-            }
+//            if (address1.isEmpty()) {
+//                addressLine1Holder.setError("Street and unit number is required!");
+//                addressLine1Holder.requestFocus();
+//                return;
+//            } else {
+//                addressLine1Holder.setError(null);
+//            }
+//
+//            if (address2.isEmpty()) {
+//                addressLine2Holder.setError("City and State is required!");
+//                addressLine2Holder.requestFocus();
+//                return;
+//            } else {
+//                addressLine2Holder.setError(null);
+//            }
+//
+//            if (address3.isEmpty()) {
+//                addressLine3Holder.setError("Pin is required!");
+//                addressLine3Holder.requestFocus();
+//                return;
+//            } else {
+//                addressLine3Holder.setError(null);
+//            }
 
             if (phone.isEmpty()) {
                 phoneNumberUpdateHolder.setError("Phone number is required!");
+                phoneNumberUpdateHolder.requestFocus();
+                return;
+            } else {
+                phoneNumberUpdateHolder.setError(null);
+            }
+
+            if (phone.length() < 10) {
+                phoneNumberUpdateHolder.setError("Phone number must consist of atleast 10 digits!");
                 phoneNumberUpdateHolder.requestFocus();
                 return;
             } else {
@@ -175,8 +188,18 @@ public class EditDetailsActivity extends AppCompatActivity {
             }
 
             progressbarUpdate.setVisibility(View.VISIBLE);
-            User user = new User(name, firebaseUser.getEmail(), phone, address1, address2, address3,
-                    requestsReceived, requestsSent, friendsList);
+            address.add(0, address1);
+            address.add(1, address2);
+            address.add(2, address3);
+            String currUserPhotoUrl;
+            if (firebaseUser.getPhotoUrl() != null) {
+                currUserPhotoUrl = firebaseUser.getPhotoUrl().toString();
+            }
+            else {
+                currUserPhotoUrl = "\"jkh\"";
+            }
+            User user = new User(name, firebaseUser.getEmail(), phone, address,
+                    requestsReceived, requestsSent, preferences, friendsList, currUserPhotoUrl);
             String userId = firebaseUser.getUid();
             if (uri != null) {
                 StorageReference storageReference1 = storageReference.child(userId + "." + getFilesExtension(uri));
@@ -184,6 +207,7 @@ public class EditDetailsActivity extends AppCompatActivity {
                     firebaseUser = authentication.getCurrentUser();
                     UserProfileChangeRequest request = new UserProfileChangeRequest.Builder().setPhotoUri(uri1).build();
                     firebaseUser.updateProfile(request);
+                    databaseReference.child(userId).child("profileImage").setValue(uri1.toString());
                 }));
             }
 
@@ -205,6 +229,43 @@ public class EditDetailsActivity extends AppCompatActivity {
                 progressbarUpdate.setVisibility(View.GONE);
             });
         });
+
+        deleteAccount.setOnClickListener(view -> {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(EditDetailsActivity.this);
+            dialog.setTitle("Are you sure?");
+            dialog.setMessage("Deleting this account will result in completely removing your account from the system and you won't be able to retrieve it later.");
+            dialog.setPositiveButton("Delete", (dialogInterface, i) -> firebaseUser.delete().addOnCompleteListener(task -> {
+
+                progressbarUpdate.setVisibility(View.VISIBLE);
+                if (task.isSuccessful()) {
+                    databaseReference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            databaseReference.child(firebaseUser.getUid()).removeValue().addOnSuccessListener(aVoid -> {
+                                firebaseUser.delete();
+                            });
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                    progressbarUpdate.setVisibility(View.GONE);
+                    Toast.makeText(EditDetailsActivity.this, "Account permanently deleted!!!", Toast.LENGTH_LONG).show();
+                    authentication.signOut();
+                    Intent i1 = new Intent(EditDetailsActivity.this, LoginActivity.class);
+                    finish();
+                    i1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i1);
+                } else {
+                    Toast.makeText(EditDetailsActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }));
+            dialog.setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
+            dialog.create().show();
+        });
+
     }
 
     private String getFilesExtension(Uri uri) {

@@ -1,11 +1,9 @@
 package com.example.partyplanner;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -14,17 +12,19 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
-public class ChatFragment extends Fragment {
+public class PreferencesActivity extends AppCompatActivity {
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chat, container, false);
-        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
+        setContentView(R.layout.activity_preferences);
+
+        ViewPager viewPager = findViewById(R.id.viewPagerTab);
+        TabLayout tabLayout = findViewById(R.id.preferencesTab);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        viewPager.setAdapter(new PagerAdapter(getFragmentManager(), tabLayout.getTabCount()));
+        viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount()));
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -44,35 +44,31 @@ public class ChatFragment extends Fragment {
 
             }
         });
-
-        return view;
     }
 
-    public class PagerAdapter extends FragmentStatePagerAdapter {
+    public static class PagerAdapter extends FragmentStatePagerAdapter {
+        private final String[] tabTitles = new String[]{"Foods", "Drinks"};
         int mNumOfTabs;
-        private String[] tabTitles = new String[]{"Chats", "Requests", "Suggestions"};
 
         public PagerAdapter(FragmentManager fm, int NumOfTabs) {
             super(fm);
             this.mNumOfTabs = NumOfTabs;
         }
+
         @Override
         public CharSequence getPageTitle(int position) {
             return tabTitles[position];
         }
 
-
+        @NonNull
         @Override
         public Fragment getItem(int position) {
 
             switch (position) {
                 case 0:
-                    return new ChatTabFragment();
+                    return new FoodsFragment();
                 case 1:
-                    return new RequestsFragment();
-                case 2:
-                    return new Suggestions();
-
+                    return new DrinksFragment();
                 default:
                     return null;
             }

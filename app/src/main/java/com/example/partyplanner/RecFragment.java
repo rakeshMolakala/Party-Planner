@@ -36,6 +36,7 @@ public class RecFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_rec, container, false);
         FirebaseAuth authentication = FirebaseAuth.getInstance();
         String firebaseUserEmail = authentication.getCurrentUser().getEmail();
+        Log.d("123USerEMail",""+firebaseUserEmail);
         RecyclerView recyclerView = v.findViewById(R.id.recRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
 
@@ -47,17 +48,19 @@ public class RecFragment extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Object invitees = snapshot.child("invitees").getValue();
                 List<String> inviteesList = (List<String>) invitees;
-                for(String s: inviteesList){
-                    if(s.equals(firebaseUserEmail)){
-                        String name = snapshot.child("name").getValue().toString();
-                        String venue = snapshot.child("venue").getValue().toString();
-                        String time = snapshot.child("time").getValue().toString();
-                        recList.add(new RecItem(name,venue,time));
-                        break;
+                if(inviteesList.size()>0){
+                    for(String s: inviteesList){
+                        if(s!=null && s.equals(firebaseUserEmail)){
+                            String name = snapshot.child("name").getValue().toString();
+                            String venue = snapshot.child("venue").getValue().toString();
+                            String time = snapshot.child("time").getValue().toString();
+                            recList.add(new RecItem(name,venue,time));
+                            break;
+                        }
                     }
+                    recAdapter = new RecAdapter(recList, getContext());
+                    recyclerView.setAdapter(recAdapter);
                 }
-                recAdapter = new RecAdapter(recList, getContext().getApplicationContext());
-                recyclerView.setAdapter(recAdapter);
             }
 
             @Override

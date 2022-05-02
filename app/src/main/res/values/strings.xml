@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">partyplanner</string>
+    <string name="app_name">Party Planner</string>
     <string name="party_planner">Party Planner</string>
     <string name="hosting_a_party_done_right">Hosting a party done right</string>
     <string name="login">Login</string>
@@ -36,5 +36,12 @@
     <string name="cancel">Cancel</string>
     <string name="update">Update</string>
     <string name="tab1">Tab1</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="drinks">Drinks</string>
+    <string name="foods">Foods</string>
+    <string name="preferences">PREFERENCES</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add">Add</string>
     <string name="email">Email</string>
+    <string name="send">send</string>
 </resources>

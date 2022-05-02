@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.partyplanner">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -11,12 +12,17 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Partyplanner">
+
+        <activity
+            android:name=".PreferencesActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
         <activity
             android:name=".ChatWindowActivity"
             android:exported="false" />
@@ -25,7 +31,9 @@
             android:exported="false" />
         <activity
             android:name=".RequestListItem"
-            android:exported="false" />
+            android:configChanges="orientation|screenSize"
+            android:exported="false"
+            tools:ignore="Instantiatable" />
         <activity
             android:name=".ProfilePictureActivity"
             android:configChanges="orientation|screenSize"

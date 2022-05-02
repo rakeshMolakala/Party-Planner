@@ -5,31 +5,25 @@ import java.util.Map;
 
 public class User {
 
-    public String username, email, number, addressLine1, addressLine2, addressLine3;
-    public List<String> requestsSent;
-    public List<String> requestsReceived;
+    public String username, email, number;
+    public List<String> requestsSent, requestsReceived, address;
+    public List<List<String>> preferences;
     public Map<String, String> friendsList;
+    public String profileImage;
 
     public User() {
 
     }
 
-    public User(String username, String email, String number, String addressLine1, String addressLine2,
-                String addressLine3, List<String> requestsReceived, List<String> requestsSent,
-                Map<String, String> friendsList) {
+    public User(String username, String email, String number, List<String> address, List<String> requestsReceived, List<String> requestsSent, List<List<String>> preferences, Map<String, String> friendsList, String profileImage) {
         this.username = username;
         this.email = email;
         this.number = number;
-        this.addressLine1 = addressLine1;
-        this.addressLine2 = addressLine2;
-        this.addressLine3 = addressLine3;
+        this.address = address;
         this.requestsReceived = requestsReceived;
         this.requestsSent = requestsSent;
+        this.preferences = preferences;
         this.friendsList = friendsList;
-    }
-
-    @Override
-    public String toString() {
-        return this.username + " " + this.email + " " + this.number + this.requestsSent + this.requestsReceived;
+        this.profileImage = profileImage;
     }
 }

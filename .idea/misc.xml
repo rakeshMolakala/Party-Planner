@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../layout/custom_preview.xml" value="0.24166666666666667" />
         <entry key="app/src/main/res/drawable-hdpi/square.xml" value="0.171" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2225" />
         <entry key="app/src/main/res/drawable/accountbackground.xml" value="0.2225" />
@@ -11,6 +12,7 @@
         <entry key="app/src/main/res/drawable/chat.xml" value="0.2225" />
         <entry key="app/src/main/res/drawable/circle.xml" value="0.165" />
         <entry key="app/src/main/res/drawable/city.xml" value="0.171" />
+        <entry key="app/src/main/res/drawable/delete.xml" value="0.171" />
         <entry key="app/src/main/res/drawable/edit.xml" value="0.165" />
         <entry key="app/src/main/res/drawable/editbutton_back.xml" value="0.2225" />
         <entry key="app/src/main/res/drawable/edittext_back.xml" value="0.2225" />
@@ -32,6 +34,7 @@
         <entry key="app/src/main/res/drawable/todo.xml" value="0.2225" />
         <entry key="app/src/main/res/drawable/user.xml" value="0.2225" />
         <entry key="app/src/main/res/layout/activity_account.xml" value="0.2905623448943401" />
+        <entry key="app/src/main/res/layout/activity_add.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_chat.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_chat_tab_item.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/activity_chat_window.xml" value="0.15070921985815602" />
@@ -40,18 +43,20 @@
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.2796610169491525" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.29583333333333334" />
+        <entry key="app/src/main/res/layout/activity_preferences.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_profilepicture.xml" value="0.19628286491387126" />
-        <entry key="app/src/main/res/layout/activity_request_list_item.xml" value="0.12228260869565218" />
+        <entry key="app/src/main/res/layout/activity_request_list_item.xml" value="0.19628286491387126" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.2958099365234375" />
-        <entry key="app/src/main/res/layout/dialog.xml" value="0.28271789550781257" />
-        <entry key="app/src/main/res/layout/fragment_account.xml" value="0.32345428466796877" />
+        <entry key="app/src/main/res/layout/fragment_account.xml" value="0.24701690673828128" />
         <entry key="app/src/main/res/layout/fragment_chat.xml" value="0.19628286491387126" />
-        <entry key="app/src/main/res/layout/fragment_chattab.xml" value="0.14629629629629629" />
+        <entry key="app/src/main/res/layout/fragment_drinks.xml" value="0.19628286491387126" />
         <entry key="app/src/main/res/layout/fragment_events.xml" value="0.19628286491387126" />
-        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.14629629629629629" />
+        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.19628286491387126" />
+        <entry key="app/src/main/res/layout/fragment_foods.xml" value="0.19628286491387126" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.19628286491387126" />
         <entry key="app/src/main/res/layout/fragment_todo.xml" value="0.23442840576171883" />
         <entry key="app/src/main/res/layout/hh.xml" value="0.33765017744423687" />
+        <entry key="app/src/main/res/layout/item.xml" value="0.25010528564453127" />
         <entry key="app/src/main/res/layout/todo.xml" value="0.19628286491387126" />
         <entry key="app/src/main/res/layout/todo_items.xml" value="0.14617462158203126" />
         <entry key="app/src/main/res/menu/menu.xml" value="0.2543822146216332" />
