@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -18,8 +20,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Partyplanner">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/api_key" />
+
         <activity
-            android:name=".EditActivity"
+            android:name=".EventInvite"
+            android:configChanges="orientation|screenSize"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".EventActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
+        <activity
+            android:name=".ViewProfile"
+            android:configChanges="orientation|screenSize"
             android:exported="false" />
         <activity
             android:name=".PreferencesActivity"
@@ -27,9 +43,6 @@
             android:exported="false" />
         <activity
             android:name=".ChatWindowActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Invite"
             android:exported="false" />
         <activity
             android:name=".ChatTabItem"
