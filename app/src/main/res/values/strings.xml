@@ -44,4 +44,22 @@
     <string name="add">Add</string>
     <string name="email">Email</string>
     <string name="send">send</string>
+    <string name="my_templates">My Templates</string>
+    <string name="_6_events">6 events</string>
+    <string name="birthdays">Birthdays</string>
+    <string name="wedding">Wedding</string>
+    <string name="pizza">Pizza</string>
+    <string name="christmas">Christmas</string>
+    <string name="halloween">Halloween</string>
+    <string name="dance">Dance</string>
+    <string name="template_1">Template 1</string>
+    <string name="template_2">Template 2</string>
+    <string name="template_3">Template 3</string>
+    <string name="template_4">Template 4</string>
+    <string name="template_5">Template 5</string>
+    <string name="template_6">Template 6</string>
+    <string name="template_7">Template 7</string>
+    <string name="template_8">Template 8</string>
+    <string name="choose_a_template">Choose a Template</string>
+    <string name="api_key">AIzaSyB_BQVCjXn_yvna3JUEd7O0VAKi2SUfpjI</string>
 </resources>
