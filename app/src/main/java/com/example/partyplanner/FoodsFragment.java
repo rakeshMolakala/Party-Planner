@@ -2,7 +2,6 @@ package com.example.partyplanner;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,47 +49,124 @@ public class FoodsFragment extends Fragment {
         foods = new ArrayList<>();
         fabFoods = viewGroup.findViewById(R.id.fabFoods);
 
-        String userId = firebaseUser.getUid();
-        reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User user = snapshot.getValue(User.class);
-                foods = user.preferences.get(0);
-                adapter = new RecyclerFoodAdapter(getActivity(), user.preferences.get(0));
-                foodsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-                foodsRecycler.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-            }
+        if (firebaseUser != null) {
+            String userId = firebaseUser.getUid();
+            reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    User user = snapshot.getValue(User.class);
+                    if (user != null) {
+                        foods = user.preferences.get(0);
+                        adapter = new RecyclerFoodAdapter(getActivity(), user.preferences.get(0));
+                        foodsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        foodsRecycler.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(FoodsFragment.this.getActivity(), "User not found!!", Toast.LENGTH_LONG).show();
+                    }
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
 
-        fabFoods.setOnClickListener(view -> {
-            Dialog d = new Dialog(getActivity());
-            d.setContentView(R.layout.activity_add);
-            EditText item = d.findViewById(R.id.item);
-            Button addItem = d.findViewById(R.id.buttonAdd);
-            Button cancelItem = d.findViewById(R.id.buttonCancel);
+            fabFoods.setOnClickListener(view -> {
+                Dialog d = new Dialog(getActivity());
+                d.setContentView(R.layout.activity_add);
+                EditText item = d.findViewById(R.id.item);
+                Button addItem = d.findViewById(R.id.buttonAdd);
+                Button cancelItem = d.findViewById(R.id.buttonCancel);
 
-            addItem.setOnClickListener(view1 -> {
-                String itemName = item.getText().toString().trim();
-                if (itemName.equals("")) {
-                    Toast.makeText(getActivity(), "Enter item", Toast.LENGTH_SHORT).show();
-                } else {
+                addItem.setOnClickListener(view1 -> {
+                    String itemName = item.getText().toString().trim();
+                    if (itemName.equals("")) {
+                        Toast.makeText(getActivity(), "Enter item", Toast.LENGTH_SHORT).show();
+                    } else {
+                        reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                User user = snapshot.getValue(User.class);
+                                if (user != null) {
+                                    List<List<String>> completePref = user.preferences;
+                                    completePref.get(0).add(itemName);
+                                    snapshot.getRef().child("preferences").setValue(completePref);
+                                    adapter = new RecyclerFoodAdapter(getActivity(), completePref.get(0));
+                                    foodsRecycler.setAdapter(adapter);
+                                    d.dismiss();
+                                    Toast.makeText(FoodsFragment.this.getActivity(), itemName + " has been added to your food preferences!", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(FoodsFragment.this.getActivity(), "User not found!!", Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+                });
+                cancelItem.setOnClickListener(view1 -> d.dismiss());
+                d.show();
+            });
+
+            ItemTouchHelper.SimpleCallback swipe = new ItemTouchHelper.SimpleCallback(0
+                    , ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
+                @Override
+                public boolean onMove(@NonNull RecyclerView recyclerView
+                        , @NonNull RecyclerView.ViewHolder viewHolder
+                        , @NonNull RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @SuppressLint("NotifyDataSetChanged")
+                @Override
+                public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                     reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             User user = snapshot.getValue(User.class);
-                            List<List<String>> completePref = user.preferences;
-                            completePref.get(0).add(itemName);
-                            snapshot.getRef().child("preferences").setValue(completePref);
-                            adapter = new RecyclerFoodAdapter(getActivity(), completePref.get(0));
-                            foodsRecycler.setAdapter(adapter);
-                            d.dismiss();
-                            Toast.makeText(FoodsFragment.this.getActivity(), itemName + " has been added to your food preferences!", Toast.LENGTH_LONG).show();
+                            if (user != null) {
+                                foods = user.preferences.get(0);
+                                String deletedFood = foods.get(viewHolder.getAdapterPosition());
+                                int deletedFoodIndex = viewHolder.getAdapterPosition();
+                                List<List<String>> completePref = user.preferences;
+                                completePref.get(0).remove(viewHolder.getAdapterPosition());
+                                snapshot.getRef().child("preferences").setValue(completePref);
+                                adapter = new RecyclerFoodAdapter(getActivity(), completePref.get(0));
+                                foodsRecycler.setAdapter(adapter);
+                                final Snackbar snackbar = Snackbar
+                                        .make(foodsRecycler, deletedFood + " removed", Snackbar.LENGTH_LONG);
+                                snackbar.setAction("UNDO", view -> {
+                                    adapter.undo(deletedFood, deletedFoodIndex);
+                                    reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            User user = snapshot.getValue(User.class);
+                                            if (user != null) {
+                                                List<List<String>> completePref = user.preferences;
+                                                completePref.get(0).add(deletedFood);
+                                                snapshot.getRef().child("preferences").setValue(completePref);
+                                                adapter = new RecyclerFoodAdapter(getActivity(), completePref.get(0));
+                                                foodsRecycler.setAdapter(adapter);
+                                            } else {
+                                                Toast.makeText(FoodsFragment.this.getActivity(), "User not found!!", Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+                                });
+                                snackbar.setActionTextColor(ContextCompat.getColor(getActivity(), R.color.purple_500));
+                                snackbar.show();
+                            } else {
+                                Toast.makeText(FoodsFragment.this.getActivity(), "User not found!!", Toast.LENGTH_LONG).show();
+                            }
                         }
 
                         @Override
@@ -99,69 +175,11 @@ public class FoodsFragment extends Fragment {
                         }
                     });
                 }
-            });
-            cancelItem.setOnClickListener(view1 -> d.dismiss());
-            d.show();
-        });
-
-        ItemTouchHelper.SimpleCallback swipe = new ItemTouchHelper.SimpleCallback(0
-                , ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView
-                    , @NonNull RecyclerView.ViewHolder viewHolder
-                    , @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        User user = snapshot.getValue(User.class);
-                        foods = user.preferences.get(0);
-                        String deletedFood = foods.get(viewHolder.getAdapterPosition());
-                        int deletedFoodIndex = viewHolder.getAdapterPosition();
-                        List<List<String>> completePref = user.preferences;
-                        completePref.get(0).remove(viewHolder.getAdapterPosition());
-                        snapshot.getRef().child("preferences").setValue(completePref);
-                        adapter = new RecyclerFoodAdapter(getActivity(), completePref.get(0));
-                        foodsRecycler.setAdapter(adapter);
-                        final Snackbar snackbar = Snackbar
-                                .make(foodsRecycler, deletedFood + " removed", Snackbar.LENGTH_LONG);
-                        snackbar.setAction("UNDO", view -> {
-                            adapter.undo(deletedFood, deletedFoodIndex);
-                            reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    User user = snapshot.getValue(User.class);
-                                    List<List<String>> completePref = user.preferences;
-                                    completePref.get(0).add(deletedFood);
-                                    snapshot.getRef().child("preferences").setValue(completePref);
-                                    adapter = new RecyclerFoodAdapter(getActivity(), completePref.get(0));
-                                    foodsRecycler.setAdapter(adapter);
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-                        });
-                        snackbar.setActionTextColor(ContextCompat.getColor(getActivity(), R.color.purple_500));
-                        snackbar.show();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            }
-        };
-        new ItemTouchHelper(swipe).attachToRecyclerView(foodsRecycler);
-
+            };
+            new ItemTouchHelper(swipe).attachToRecyclerView(foodsRecycler);
+        } else {
+            Toast.makeText(FoodsFragment.this.getActivity(), "User not found!!", Toast.LENGTH_LONG).show();
+        }
         return viewGroup;
     }
 }
