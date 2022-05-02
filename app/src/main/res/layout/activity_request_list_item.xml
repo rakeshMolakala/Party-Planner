@@ -1,59 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp"
-    app:cardUseCompatPadding="true"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+    android:orientation="vertical">
 
-    <RelativeLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="5dp"
-        android:background="@color/white">
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="19dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/user_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="7dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="#FFFFFF"
+            android:orientation="vertical">
 
-            android:textColor="@android:color/black"
-            android:textSize="25sp"
-            android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="7dp"
+                android:text="Testing"
+                android:textColor="@android:color/black"
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
-            android:textSize="15sp"
-            android:layout_marginTop="50dp"
-            android:layout_marginStart="15dp"
-            android:layout_alignParentLeft="true"
-            />
+            <TextView
+                android:id="@+id/request_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_marginEnd="15dp"
+                android:background="#ffffff"
+                android:text="Testi"
+                android:textColor="@color/design_default_color_primary"
+                android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginStart="15dp"
+                    android:text="Testing"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
 
 
-        <TextView
-            android:id="@+id/request_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:background="#ffffff"
-            android:textSize="20sp"
-
-            android:layout_marginEnd="15dp"
-            android:textColor="@color/design_default_color_primary" />
+        </LinearLayout>
 
 
-    </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 
 
-
-</androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

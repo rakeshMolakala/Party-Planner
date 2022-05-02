@@ -4,34 +4,69 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
 public class ChatFragment extends Fragment {
+    ViewGroup viewGroup;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chat, container, false);
-        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        viewPager.setAdapter(new PagerAdapter(getFragmentManager(), tabLayout.getTabCount()));
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setupWithViewPager(viewPager);
+        viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_chat, container, false);
+        return viewGroup;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        final FrameLayout viewPager = viewGroup.findViewById(R.id.simpleLayout);
+        TabLayout tabLayout = viewGroup.findViewById(R.id.tabs);
+        TabLayout.Tab tab = tabLayout.getTabAt(0);
+        tab.select();
+        FragmentManager fm = getParentFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.simpleLayout, new ChatTabFragment());
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        ft.commit();
+
+//        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+//        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        viewPager.setAdapter(new PagerAdapter(getFragmentManager(), tabLayout.getTabCount()));
+//        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+//        tabLayout.setupWithViewPager(viewPager);
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
+                //viewPager.setCurrentItem(tab.getPosition());
+                Fragment fragment = null;
+                switch (tab.getPosition()) {
+                    case 0:
+                        fragment = new ChatTabFragment();
+                        break;
+                    case 1:
+                        fragment = new RequestsFragment();
+                        break;
+                    case 2:
+                        fragment = new Suggestions();
+                        break;
+                }
+                FragmentManager fm = getParentFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                assert fragment != null;
+                ft.replace(R.id.simpleLayout, fragment);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                ft.commit();
             }
 
             @Override
@@ -44,13 +79,11 @@ public class ChatFragment extends Fragment {
 
             }
         });
-
-        return view;
     }
 
     public class PagerAdapter extends FragmentStatePagerAdapter {
         int mNumOfTabs;
-        private String[] tabTitles = new String[]{"Chats", "Requests", "Suggestions"};
+        public String[] tabTitles = new String[]{"Chats", "Requests", "Suggestions"};
 
         public PagerAdapter(FragmentManager fm, int NumOfTabs) {
             super(fm);

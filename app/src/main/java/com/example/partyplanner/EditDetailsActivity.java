@@ -46,7 +46,7 @@ public class EditDetailsActivity extends AppCompatActivity {
     ProgressBar progressbarUpdate;
     List<String> requestsSent, requestsReceived, address;
     List<List<String>> preferences;
-    Map<String, String> friendsList;
+    Map<String, List<String>> friendsList;
 
     private DatabaseReference databaseReference;
     private FirebaseAuth authentication;

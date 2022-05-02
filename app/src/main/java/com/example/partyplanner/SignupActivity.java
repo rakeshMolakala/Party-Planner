@@ -28,7 +28,7 @@ import java.util.Map;
 public class SignupActivity extends AppCompatActivity {
     List<String> requestsReceived, requestsSent, address, foods, drinks;
     List<List<String>> preferences;
-    Map<String, String> friendsList = new HashMap<>();
+    Map<String, List<String>> friendsList = new HashMap<>();
     private TextInputLayout usernameHolder, emailSignupHolder, phoneNumberHolder, passwordSignupHolder, rePasswordSignupHolder;
     private ProgressBar progressbar;
     private FirebaseAuth authentication;
@@ -54,7 +54,10 @@ public class SignupActivity extends AppCompatActivity {
         foods = new ArrayList<>(Arrays.asList("Food 1", "Food 2", "Food 3"));
         drinks = new ArrayList<>(Arrays.asList("Drink 1", "Drink 2", "Drink 3"));
         preferences = new ArrayList<>(Arrays.asList(foods, drinks));
-        friendsList.put("dummy", " ");
+
+        ArrayList<String> temp = new ArrayList<>();
+        temp.add(" ");
+        friendsList.put("dummy", temp);
         profilePhoto = "\"jkh\"";
         progressbar = findViewById(R.id.progressbarSignup);
 

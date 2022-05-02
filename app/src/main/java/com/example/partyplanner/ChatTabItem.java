@@ -10,10 +10,12 @@ public class ChatTabItem extends AppCompatActivity implements ChatItemListener {
 
     private final String userName;
     private final String userEmail;
+    private final String profilePhotoUrl;
 
-    public ChatTabItem(String userName, String userEmail) {
+    public ChatTabItem(String userName, String userEmail, String profilePhotoUrl) {
         this.userName = userName;
         this.userEmail = userEmail;
+        this.profilePhotoUrl = profilePhotoUrl;
     }
 
     public String getUserEmail() {
@@ -22,6 +24,10 @@ public class ChatTabItem extends AppCompatActivity implements ChatItemListener {
 
     public String getUserName() {
         return this.userName;
+    }
+
+    public String getProfilePhotoUrl() {
+        return this.profilePhotoUrl;
     }
 
     @Override
