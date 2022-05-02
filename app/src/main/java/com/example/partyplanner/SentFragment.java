@@ -105,6 +105,7 @@ public class SentFragment extends Fragment {
 
         });
 
+
         return v;
 
     }

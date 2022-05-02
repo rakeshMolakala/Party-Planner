@@ -60,6 +60,18 @@ public class SentAdapter extends RecyclerView.Adapter<SentAdapter.ViewHolder>{
                 context.startActivity(intent);
             }
         });
+
+        holder.edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,EditActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Bundle extras = new Bundle();
+                extras.putString("eventName",eventName);
+                intent.putExtras(extras);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -72,6 +84,7 @@ public class SentAdapter extends RecyclerView.Adapter<SentAdapter.ViewHolder>{
         public TextView sentVenue;
         public TextView sentTime;
         public Button invite;
+        public Button edit;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -79,6 +92,7 @@ public class SentAdapter extends RecyclerView.Adapter<SentAdapter.ViewHolder>{
             sentVenue = (TextView) itemView.findViewById(R.id.sentVenue);
             sentTime = (TextView) itemView.findViewById(R.id.sentEventTime);
             invite = itemView.findViewById(R.id.invite);
+            edit = itemView.findViewById(R.id.editButton);
         }
     }
 
