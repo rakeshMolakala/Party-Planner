@@ -77,7 +77,8 @@ public class RequestsFragment extends Fragment {
                 List<String> requestSentList = user.requestsSent;
                 if(requestSentList.size() > 0) {
                     if (requestSentList.contains(firebaseUserEmail)) {
-                        RequestListItem itemCard = new RequestListItem(name, "Accept", user.email);
+                        RequestListItem itemCard = new RequestListItem(name, "Accept",
+                                user.email, user.profileImage);
                         linkItemCardArrayList.add(itemCard);
                         itemviewAdapter.notifyItemInserted(0);
                     }
@@ -93,7 +94,8 @@ public class RequestsFragment extends Fragment {
                 User user = snapshot.getValue(User.class);
                 String name = user.username;
 
-                RequestListItem currObj = new RequestListItem(name, "Accept", user.email);
+                RequestListItem currObj = new RequestListItem(name, "Accept", user.email,
+                        user.profileImage);
                 int indexOf = 0;
                 if (linkItemCardArrayList.contains(currObj)) {
                     indexOf = linkItemCardArrayList.indexOf(currObj);

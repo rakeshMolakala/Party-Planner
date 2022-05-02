@@ -93,7 +93,7 @@ public class Suggestions extends Fragment {
                 User user = snapshot.getValue(User.class);
                 String name = user.username;
                 String email = user.email;
-                Map<String, String> friendsList = user.friendsList;
+                Map<String, List<String>> friendsList = user.friendsList;
                 List<String> requestSentList = user.requestsSent;
                 List<String> requestReceivedList = user.requestsReceived;
                 String requestStatus = "Add Friend";
@@ -110,7 +110,8 @@ public class Suggestions extends Fragment {
                 if (!email.equals(firebaseUserEmail)) {
                     if (requestSentList.size() > 0 && !requestSentList.contains(firebaseUserEmail)) {
                         if (friendsList.size() > 0 && !friendsList.containsKey(cleanEmail)) {
-                            RequestListItem itemCard = new RequestListItem(name, requestStatus, user.email);
+                            RequestListItem itemCard = new RequestListItem(name, requestStatus, user.email,
+                                    user.profileImage);
                             linkItemCardArrayList.add(itemCard);
                             itemviewAdapter.notifyItemInserted(0);
                         }
@@ -134,11 +135,13 @@ public class Suggestions extends Fragment {
                 }
 
                 if (!email.equals(firebaseUserEmail)) {
-                    RequestListItem currObj = new RequestListItem(name, "Add Friend", user.email);
+                    RequestListItem currObj = new RequestListItem(name, "Add Friend", user.email,
+                            user.profileImage);
                     int indexOf = 0;
                     if (linkItemCardArrayList.contains(currObj)) {
                         indexOf = linkItemCardArrayList.indexOf(currObj);
-                        linkItemCardArrayList.set(indexOf, new RequestListItem(name, requestStatus, user.email));
+                        linkItemCardArrayList.set(indexOf, new RequestListItem(name, requestStatus, user.email,
+                                user.profileImage));
                     }
                     itemviewAdapter.notifyItemChanged(indexOf);
                 }

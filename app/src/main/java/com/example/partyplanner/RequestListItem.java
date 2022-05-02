@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -35,12 +36,14 @@ public class RequestListItem extends AppCompatActivity implements RequestItemLis
     private String currentLoggedInUserName;
     private String userId;
     private DatabaseReference userRef;
+    private String photoUrl;
 
 
-    public RequestListItem(String userName, String requestStatus, String userEmail) {
+    public RequestListItem(String userName, String requestStatus, String userEmail, String photoUrl) {
         this.userName = userName;
         this.requestStatus = requestStatus;
         this.userEmail = userEmail;
+        this.photoUrl = photoUrl;
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         userRef = mDatabase.child("Users");
@@ -102,6 +105,8 @@ public class RequestListItem extends AppCompatActivity implements RequestItemLis
     private void acceptRequest(String requestedUserName, String receivingUserEmail,
                                Context context) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        Log.d("tag106", requestedUserName);
+        Log.d("tag107", receivingUserEmail);
         alertDialogBuilder.setMessage("Accept " + userName + "'s request?");
         alertDialogBuilder.setPositiveButton("yes",
                 new DialogInterface.OnClickListener() {
@@ -111,13 +116,26 @@ public class RequestListItem extends AppCompatActivity implements RequestItemLis
                             @Override
                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                 User user = dataSnapshot.getValue(User.class);
+                                Log.d("tag115", user.toString());
+                                Log.d("tag116", requestedUserName);
                                 String name = user.username;
-                                if (name.equals(requestedUserName)) {
+                                String profileImage = user.profileImage;
+                                if (name == requestedUserName) {
                                     String firebaseUserEmail = authentication.getCurrentUser().getEmail();
                                     List<String> requestedUserSents = user.requestsSent;
-                                    Map<String, String> friendsList = user.friendsList;
+                                    Map<String, List<String>> friendsList = user.friendsList;
                                     String cleanEmail = cleanEmail(firebaseUserEmail);
-                                    friendsList.put(cleanEmail, currentLoggedInUserName);
+                                    List<String> nameProfile = new ArrayList<>();
+                                    nameProfile.add(currentLoggedInUserName);
+                                    //Log.d("tag115", firebaseUser.getPhotoUrl().toString());
+                                    if(firebaseUser.getPhotoUrl() == null) {
+                                        nameProfile.add("");
+                                    }
+                                    else {
+                                        nameProfile.add(firebaseUser.getPhotoUrl().toString());
+                                    }
+                                    //nameProfile.add(firebaseUser.getPhotoUrl().toString());
+                                    friendsList.put(cleanEmail, nameProfile);
                                     requestedUserSents.remove(firebaseUserEmail);
                                     dataSnapshot.getRef().child("requestsSent").setValue(requestedUserSents);
                                     dataSnapshot.getRef().child("friendsList").setValue(friendsList);
@@ -150,11 +168,19 @@ public class RequestListItem extends AppCompatActivity implements RequestItemLis
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 User details = snapshot.getValue(User.class);
+                                //Log.d("tag158", details.toString());
                                 if (details != null) {
                                     List<String> requestsReceived = details.requestsReceived;
-                                    Map<String, String> friendsList = details.friendsList;
+                                    Map<String, List<String>> friendsList = details.friendsList;
                                     String cleanEmail = cleanEmail(receivingUserEmail);
-                                    friendsList.put(cleanEmail,  requestedUserName);
+
+
+                                    List<String> userPhoto = new ArrayList<>();
+                                    userPhoto.add(requestedUserName);
+                                    userPhoto.add(photoUrl);
+                                    friendsList.put(cleanEmail, userPhoto);
+
+                                    //friendsList.put(cleanEmail,  requestedUserName);
                                     requestsReceived.remove(receivingUserEmail);
                                     snapshot.getRef().child("requestsReceived").setValue(requestsReceived);
                                     snapshot.getRef().child("friendsList").setValue(friendsList);

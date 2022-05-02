@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AccountFragment">
+    tools:context=".ViewProfile">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
                     app:cardCornerRadius="100dp">
 
                     <ImageView
-                        android:id="@+id/profilePicture"
+                        android:id="@+id/profilePictureView"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
                         android:contentDescription="@string/profile_picture"
@@ -37,7 +37,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <TextView
-                    android:id="@+id/accountName"
+                    android:id="@+id/accountNameView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -96,13 +96,13 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height=".5dp"
-                                android:layout_marginTop="5dp"
                                 android:layout_marginStart="20dp"
+                                android:layout_marginTop="5dp"
                                 android:layout_marginEnd="20dp"
                                 android:background="#666666" />
 
                             <TextView
-                                android:id="@+id/eventConductedCount"
+                                android:id="@+id/eventConductedCountView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingTop="5dp"
@@ -122,9 +122,9 @@
                             <View
                                 android:layout_width="1dp"
                                 android:layout_height="match_parent"
-                                android:background="#666666"
                                 android:layout_marginTop="8dp"
-                                android:layout_marginBottom="8dp"/>
+                                android:layout_marginBottom="8dp"
+                                android:background="#666666" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -144,13 +144,13 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height=".5dp"
-                                android:layout_marginTop="5dp"
                                 android:layout_marginStart="20dp"
+                                android:layout_marginTop="5dp"
                                 android:layout_marginEnd="20dp"
                                 android:background="#666666" />
 
                             <TextView
-                                android:id="@+id/eventAttendedCount"
+                                android:id="@+id/eventAttendedCountView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingTop="5dp"
@@ -184,7 +184,7 @@
                         android:src="@drawable/email" />
 
                     <TextView
-                        android:id="@+id/emailAccount"
+                        android:id="@+id/emailView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -211,7 +211,7 @@
                         android:src="@drawable/phone" />
 
                     <TextView
-                        android:id="@+id/phoneNumberAccount"
+                        android:id="@+id/phoneNumberView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -244,7 +244,7 @@
                         tools:ignore="RtlSymmetry">
 
                         <TextView
-                            android:id="@+id/addressLine1Account"
+                            android:id="@+id/addressLine1View"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -255,7 +255,7 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/addressLine2Account"
+                            android:id="@+id/addressLine2View"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -266,7 +266,7 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/addressLine3Account"
+                            android:id="@+id/addressLine3View"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -281,10 +281,10 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="12dp"
-                    android:layout_gravity="center"
                     app:cardCornerRadius="15dp"
                     app:cardUseCompatPadding="true">
 
@@ -294,7 +294,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/preferencesEdit"
+                            android:id="@+id/preferencesView"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:gravity="center"
@@ -307,71 +307,12 @@
                             tools:ignore="RtlSymmetry" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="112dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginEnd="112dp"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <Button
-                        android:id="@+id/editDetails"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/edit_details"
-                        android:textColor="@color/white"
-                        app:icon="@drawable/edit"
-                        app:iconGravity="textEnd" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height=".5dp"
-                    android:layout_marginTop="20dp"
-                    android:background="#666666" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true">
-
-                        <LinearLayout
-                            android:id="@+id/logout"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:orientation="horizontal"
-                            tools:ignore="UseCompoundDrawables">
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:contentDescription="@string/logout"
-                                android:src="@drawable/logout" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:text="@string/logout"
-                                android:textSize="18sp" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>
 
     <ProgressBar
-        android:id="@+id/progressbarLogout"
+        android:id="@+id/progressbarProfileView"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -66,26 +66,34 @@ public class RecyclerFoodAdapter extends RecyclerView.Adapter<RecyclerFoodAdapte
                     FirebaseAuth authentication = FirebaseAuth.getInstance();
                     FirebaseUser firebaseUser = authentication.getCurrentUser();
                     DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users");
-                    String userId = firebaseUser.getUid();
-                    reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            User user = snapshot.getValue(User.class);
-                            List<List<String>> completePref = user.preferences;
-                            completePref.get(0).remove(position);
-                            completePref.get(0).add(itemName);
-                            snapshot.getRef().child("preferences").setValue(completePref);
-                            foods = user.preferences.get(0);
-                            notifyItemChanged(position);
-                            d.dismiss();
-                            Toast.makeText(context, prev + " has been updated!", Toast.LENGTH_LONG).show();
-                        }
+                    if (firebaseUser != null) {
+                        String userId = firebaseUser.getUid();
+                        reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                User user = snapshot.getValue(User.class);
+                                if (user != null) {
+                                    List<List<String>> completePref = user.preferences;
+                                    completePref.get(0).remove(position);
+                                    completePref.get(0).add(itemName);
+                                    snapshot.getRef().child("preferences").setValue(completePref);
+                                    foods = user.preferences.get(0);
+                                    notifyItemChanged(position);
+                                    d.dismiss();
+                                    Toast.makeText(context, prev + " has been updated!", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(context, "User not found!!", Toast.LENGTH_LONG).show();
+                                }
+                            }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
-                        }
-                    });
+                            }
+                        });
+                    } else {
+                        Toast.makeText(context, "User not found!!", Toast.LENGTH_LONG).show();
+                    }
                 }
             });
             cancelFood.setOnClickListener(view1 -> d.dismiss());

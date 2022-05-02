@@ -23,7 +23,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ChatTabFragment extends Fragment {
@@ -31,15 +33,21 @@ public class ChatTabFragment extends Fragment {
     private RecyclerView linkCollectorRecyclerView;
     private ChatViewAdapter itemviewAdapter;
     private ProgressBar progressBar;
+    ViewGroup viewGroup;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_chattab, container, false);
+        viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_chattab, container, false);
+        return viewGroup;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         linkCollectorRecyclerView =  viewGroup.findViewById(R.id.chats_recycler_view);
         progressBar = viewGroup.findViewById(R.id.chatsprogressBar);
         init(viewGroup);
-        return viewGroup;
     }
 
     private void init(ViewGroup container) {
@@ -73,16 +81,20 @@ public class ChatTabFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User details = snapshot.getValue(User.class);
-                Map<String, String> friendsList = details.friendsList;
+                assert details != null;
+                Map<String, List<String>> friendsList = details.friendsList;
                 if (friendsList.size() > 0) {
-                    for (Map.Entry<String, String> entry : friendsList.entrySet()) {
+                    for (Map.Entry<String, List<String>> entry : friendsList.entrySet()) {
                         String email = entry.getKey();
                         if(email.equals("dummy")) {
                             continue;
                         }
-                        String username = entry.getValue();
+                        String username = entry.getValue().get(0);
                         email = cleanEmail(email);
-                        ChatTabItem itemCard = new ChatTabItem(username, email);
+                        Log.d("tag86Username", username);
+                        Log.d("tag86", entry.getValue().get(1));
+                        String profileImage = entry.getValue().get(1);
+                        ChatTabItem itemCard = new ChatTabItem(username, email, profileImage);
                         linkItemCardArrayList.add(itemCard);
                         itemviewAdapter.notifyItemInserted(0);
                     }
@@ -109,7 +121,7 @@ public class ChatTabFragment extends Fragment {
     private void createRecyclerView(ViewGroup container) {
         RecyclerView.LayoutManager rLayoutManger = new LinearLayoutManager(container.getContext());
         linkCollectorRecyclerView.setHasFixedSize(true);
-        itemviewAdapter = new ChatViewAdapter(linkItemCardArrayList);
+        itemviewAdapter = new ChatViewAdapter(linkItemCardArrayList, container.getContext());
         ChatItemListener itemClickListener = new ChatItemListener() {
             @Override
             public void onChatItemClick(int position, String userName, String userEmail,

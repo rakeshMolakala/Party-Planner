@@ -2,6 +2,9 @@
 
 package com.example.partyplanner;
 
+import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +14,17 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewHolder> {
 
     private final ArrayList<ChatTabItem> itemList;
     private ChatItemListener listener;
+    private Context fragContext;
 
-    public ChatViewAdapter(ArrayList<ChatTabItem> itemList) {
+    public ChatViewAdapter(ArrayList<ChatTabItem> itemList, Context context) {
         this.itemList = itemList;
+        this.fragContext = context;
     }
 
     public void setOnItemClickListener(ChatItemListener listener) {
@@ -35,6 +42,13 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewHolder> {
         ChatTabItem currentItem = itemList.get(position);
         holder.userName.setText(currentItem.getUserName());
         holder.email.setText(currentItem.getUserEmail());
+        String profileUrl = currentItem.getProfilePhotoUrl();
+        if (profileUrl.length()>5) {
+            Picasso.with(fragContext).load(Uri.parse(profileUrl)).into(holder.profilePicture);
+        }
+        if (profileUrl.length()==5) {
+            holder.profilePicture.setImageResource(R.drawable.user);
+        }
     }
 
     @Override
