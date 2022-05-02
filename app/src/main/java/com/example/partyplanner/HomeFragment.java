@@ -42,8 +42,7 @@ public class HomeFragment extends Fragment {
             Toast.makeText(HomeFragment.this.getActivity(), "Something went wrong! Your credentials are not available at the moment", Toast.LENGTH_LONG).show();
         } else {
             Uri uri = firebaseUser.getPhotoUrl();
-            File f = new File(uri.getPath());
-            if (f.length() == 5) {
+            if (firebaseUser.getPhotoUrl() == null) {
                 homeProfile.setImageResource(R.drawable.user);
             } else {
                 Picasso.with(HomeFragment.this.getActivity()).load(uri).into(homeProfile);

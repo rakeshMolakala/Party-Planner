@@ -47,6 +47,7 @@ public class EditDetailsActivity extends AppCompatActivity {
     List<String> requestsSent, requestsReceived, address;
     List<List<String>> preferences;
     Map<String, List<String>> friendsList;
+    String Username;
 
     private DatabaseReference databaseReference;
     private FirebaseAuth authentication;
@@ -92,6 +93,7 @@ public class EditDetailsActivity extends AppCompatActivity {
                         } else {
                             Picasso.with(EditDetailsActivity.this).load(uri).into(editPhoto);
                         }
+                        Username = details.username;
                         phoneNumberUpdateHolder.getEditText().setText(details.number);
                         addressLine1Holder.getEditText().setText(details.address.get(0));
                         addressLine2Holder.getEditText().setText(details.address.get(1));
@@ -166,7 +168,7 @@ public class EditDetailsActivity extends AppCompatActivity {
             else {
                 currUserPhotoUrl = "\"jkh\"";
             }
-            User user = new User(firebaseUser.getDisplayName(), firebaseUser.getEmail(), phone, address,
+            User user = new User(Username, firebaseUser.getEmail(), phone, address,
                     requestsReceived, requestsSent, preferences, friendsList, currUserPhotoUrl);
             String userId = firebaseUser.getUid();
             if (uri != null) {
@@ -181,7 +183,7 @@ public class EditDetailsActivity extends AppCompatActivity {
 
             databaseReference.child(userId).setValue(user).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    UserProfileChangeRequest request = new UserProfileChangeRequest.Builder().setDisplayName(firebaseUser.getDisplayName()).build();
+                    UserProfileChangeRequest request = new UserProfileChangeRequest.Builder().setDisplayName(Username).build();
                     firebaseUser.updateProfile(request);
                     Toast.makeText(EditDetailsActivity.this, "Update Successful!", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(EditDetailsActivity.this, MainActivity.class);
