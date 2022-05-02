@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+
 public class HomeFragment extends Fragment {
 
     @Nullable
@@ -40,7 +42,12 @@ public class HomeFragment extends Fragment {
             Toast.makeText(HomeFragment.this.getActivity(), "Something went wrong! Your credentials are not available at the moment", Toast.LENGTH_LONG).show();
         } else {
             Uri uri = firebaseUser.getPhotoUrl();
-            Picasso.with(HomeFragment.this.getActivity()).load(uri).into(homeProfile);
+            File f = new File(uri.getPath());
+            if (f.length() == 5) {
+                homeProfile.setImageResource(R.drawable.user);
+            } else {
+                Picasso.with(HomeFragment.this.getActivity()).load(uri).into(homeProfile);
+            }
         }
 
         homeProfile.setOnClickListener(view -> startActivity(new Intent(HomeFragment.this.getActivity(), ProfilePictureActivity.class)));

@@ -58,35 +58,6 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/usernameUpdateHolder"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginEnd="32dp"
-                    android:ems="10"
-                    android:textColorHint="#666666"
-                    app:boxStrokeWidth="0dp"
-                    app:boxStrokeWidthFocused="0dp"
-                    app:endIconMode="clear_text"
-                    app:endIconTint="#A846F4"
-                    app:startIconDrawable="@drawable/user"
-                    app:startIconTint="#A846F4">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/usernameUpdate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autofillHints=""
-                        android:background="@drawable/edittext_back"
-                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
-                        android:ems="10"
-                        android:hint="@string/name"
-                        android:inputType="textCapWords"
-                        android:textColor="@color/black" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/phoneNumberUpdateHolder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -234,26 +205,6 @@
                         android:layout_marginStart="10dp"
                         android:layout_weight="1"
                         android:text="@string/update" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="48dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="48dp"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <Button
-                        android:id="@+id/deleteAccount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="#D10000"
-                        android:text="@string/delete_account"
-                        android:textColor="@color/white"
-                        app:icon="@drawable/delete"
-                        app:iconGravity="textEnd" />
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>

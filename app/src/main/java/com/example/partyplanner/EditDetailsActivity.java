@@ -40,9 +40,9 @@ import java.util.Map;
 
 public class EditDetailsActivity extends AppCompatActivity {
     ImageView editPhoto;
-    TextInputLayout usernameUpdateHolder, phoneNumberUpdateHolder, addressLine1Holder, addressLine2Holder, addressLine3Holder;
+    TextInputLayout phoneNumberUpdateHolder, addressLine1Holder, addressLine2Holder, addressLine3Holder;
     TextView changePhoto;
-    Button cancel, update, deleteAccount;
+    Button cancel, update;
     ProgressBar progressbarUpdate;
     List<String> requestsSent, requestsReceived, address;
     List<List<String>> preferences;
@@ -65,7 +65,6 @@ public class EditDetailsActivity extends AppCompatActivity {
         firebaseUser = authentication.getCurrentUser();
         storageReference = FirebaseStorage.getInstance().getReference().child("ProfilePictures");
 
-        usernameUpdateHolder = findViewById(R.id.usernameUpdateHolder);
         phoneNumberUpdateHolder = findViewById(R.id.phoneNumberUpdateHolder);
         addressLine1Holder = findViewById(R.id.addressLine1Holder);
         addressLine2Holder = findViewById(R.id.addressLine2Holder);
@@ -75,7 +74,6 @@ public class EditDetailsActivity extends AppCompatActivity {
         cancel = findViewById(R.id.cancelEdit);
         update = findViewById(R.id.updateEdit);
         address = new ArrayList<>();
-        deleteAccount = findViewById(R.id.deleteAccount);
         progressbarUpdate = findViewById(R.id.progressbarUpdate);
 
         if (firebaseUser == null) {
@@ -83,14 +81,17 @@ public class EditDetailsActivity extends AppCompatActivity {
             progressbarUpdate.setVisibility(View.GONE);
         } else {
             Uri uri = firebaseUser.getPhotoUrl();
-            Picasso.with(EditDetailsActivity.this).load(uri).into(editPhoto);
             String userId = firebaseUser.getUid();
             databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     User details = snapshot.getValue(User.class);
                     if (details != null) {
-                        usernameUpdateHolder.getEditText().setText(details.username);
+                        if (details.profileImage.length() == 5) {
+                            editPhoto.setImageResource(R.drawable.user);
+                        } else {
+                            Picasso.with(EditDetailsActivity.this).load(uri).into(editPhoto);
+                        }
                         phoneNumberUpdateHolder.getEditText().setText(details.number);
                         addressLine1Holder.getEditText().setText(details.address.get(0));
                         addressLine2Holder.getEditText().setText(details.address.get(1));
@@ -125,43 +126,10 @@ public class EditDetailsActivity extends AppCompatActivity {
         });
 
         update.setOnClickListener(view -> {
-            String name = usernameUpdateHolder.getEditText().getText().toString().trim();
             String phone = PhoneNumberUtils.formatNumber(phoneNumberUpdateHolder.getEditText().getText().toString().trim());
             String address1 = addressLine1Holder.getEditText().getText().toString().trim();
             String address2 = addressLine2Holder.getEditText().getText().toString().trim();
             String address3 = addressLine3Holder.getEditText().getText().toString().trim();
-
-            if (name.isEmpty()) {
-                usernameUpdateHolder.setError("Name is required!");
-                usernameUpdateHolder.requestFocus();
-                return;
-            } else {
-                usernameUpdateHolder.setError(null);
-            }
-
-//            if (address1.isEmpty()) {
-//                addressLine1Holder.setError("Street and unit number is required!");
-//                addressLine1Holder.requestFocus();
-//                return;
-//            } else {
-//                addressLine1Holder.setError(null);
-//            }
-//
-//            if (address2.isEmpty()) {
-//                addressLine2Holder.setError("City and State is required!");
-//                addressLine2Holder.requestFocus();
-//                return;
-//            } else {
-//                addressLine2Holder.setError(null);
-//            }
-//
-//            if (address3.isEmpty()) {
-//                addressLine3Holder.setError("Pin is required!");
-//                addressLine3Holder.requestFocus();
-//                return;
-//            } else {
-//                addressLine3Holder.setError(null);
-//            }
 
             if (phone.isEmpty()) {
                 phoneNumberUpdateHolder.setError("Phone number is required!");
@@ -198,7 +166,7 @@ public class EditDetailsActivity extends AppCompatActivity {
             else {
                 currUserPhotoUrl = "\"jkh\"";
             }
-            User user = new User(name, firebaseUser.getEmail(), phone, address,
+            User user = new User(firebaseUser.getDisplayName(), firebaseUser.getEmail(), phone, address,
                     requestsReceived, requestsSent, preferences, friendsList, currUserPhotoUrl);
             String userId = firebaseUser.getUid();
             if (uri != null) {
@@ -213,7 +181,7 @@ public class EditDetailsActivity extends AppCompatActivity {
 
             databaseReference.child(userId).setValue(user).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    UserProfileChangeRequest request = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
+                    UserProfileChangeRequest request = new UserProfileChangeRequest.Builder().setDisplayName(firebaseUser.getDisplayName()).build();
                     firebaseUser.updateProfile(request);
                     Toast.makeText(EditDetailsActivity.this, "Update Successful!", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(EditDetailsActivity.this, MainActivity.class);
@@ -229,43 +197,6 @@ public class EditDetailsActivity extends AppCompatActivity {
                 progressbarUpdate.setVisibility(View.GONE);
             });
         });
-
-        deleteAccount.setOnClickListener(view -> {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(EditDetailsActivity.this);
-            dialog.setTitle("Are you sure?");
-            dialog.setMessage("Deleting this account will result in completely removing your account from the system and you won't be able to retrieve it later.");
-            dialog.setPositiveButton("Delete", (dialogInterface, i) -> firebaseUser.delete().addOnCompleteListener(task -> {
-
-                progressbarUpdate.setVisibility(View.VISIBLE);
-                if (task.isSuccessful()) {
-                    databaseReference.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            databaseReference.child(firebaseUser.getUid()).removeValue().addOnSuccessListener(aVoid -> {
-                                firebaseUser.delete();
-                            });
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-                    progressbarUpdate.setVisibility(View.GONE);
-                    Toast.makeText(EditDetailsActivity.this, "Account permanently deleted!!!", Toast.LENGTH_LONG).show();
-                    authentication.signOut();
-                    Intent i1 = new Intent(EditDetailsActivity.this, LoginActivity.class);
-                    finish();
-                    i1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i1);
-                } else {
-                    Toast.makeText(EditDetailsActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }));
-            dialog.setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
-            dialog.create().show();
-        });
-
     }
 
     private String getFilesExtension(Uri uri) {

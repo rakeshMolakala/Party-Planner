@@ -74,7 +74,11 @@ public class AccountFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     User details = snapshot.getValue(User.class);
                     if (details != null) {
-                        Picasso.with(AccountFragment.this.getActivity()).load(Uri.parse(details.profileImage)).into(profilePicture);
+                        if (details.profileImage.length() == 5) {
+                            profilePicture.setImageResource(R.drawable.user);
+                        } else {
+                            Picasso.with(AccountFragment.this.getActivity()).load(Uri.parse(details.profileImage)).into(profilePicture);
+                        }
                         accountName.setText(details.username);
                         emailAccount.setText(firebaseUser.getEmail());
                         phoneNumberAccount.setText(details.number);
