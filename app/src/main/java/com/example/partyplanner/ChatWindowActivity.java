@@ -86,6 +86,10 @@ public class ChatWindowActivity extends AppCompatActivity {
             public void onClick(View view) {
                 ChatMessageModel messageModel = new ChatMessageModel(senderEmail,
                         receivingUserEmail, message.getText().toString());
+                if (message.getText().toString().replace(" ", "").length() == 0) {
+                    Toast.makeText(ChatWindowActivity.this, "Message is empty", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 String userId = firebaseUser.getUid();
                 FirebaseDatabase.getInstance().getReference("Users").child(userId)
