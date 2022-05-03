@@ -17,15 +17,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder>{
 
     private List<RecItem> recList;
     private Context context;
+    private Map<Integer,String> eventMap;
 
-    public RecAdapter(List<RecItem> recList, Context context) {
+    public RecAdapter(List<RecItem> recList, Context context, Map<Integer,String> eventMap ) {
         this.recList = recList;
         this.context = context;
+        this.eventMap = eventMap;
     }
 
     @NonNull
@@ -41,6 +44,19 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder>{
         holder.recName.setText(item.getRecName());
         holder.recVenue.setText(item.getRecVenue());
         holder.recTime.setText(item.getRecTime());
+        String eventName = eventMap.get(position);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,ShowRecCard.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Bundle extras = new Bundle();
+                extras.putString("eventName",eventName);
+                intent.putExtras(extras);
+                context.startActivity(intent);
+            }
+        });
 
         holder.chat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +77,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder>{
         public TextView recVenue;
         public TextView recTime;
         public Button chat;
+        public View view;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,6 +85,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder>{
             recVenue = (TextView) itemView.findViewById(R.id.recEventVenue);
             recTime = (TextView) itemView.findViewById(R.id.recEventTime);
             chat = itemView.findViewById(R.id.chat);
+            view = itemView;
         }
     }
 }

@@ -21,18 +21,23 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RecFragment extends Fragment {
 
     ArrayList<RecItem> recList;
     RecAdapter recAdapter;
+    Map<Integer,String> eventMap;
+    int c =0;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         recList = new ArrayList<>();
+        eventMap = new HashMap<>();
         View v = inflater.inflate(R.layout.fragment_rec, container, false);
         FirebaseAuth authentication = FirebaseAuth.getInstance();
         String firebaseUserEmail = authentication.getCurrentUser().getEmail();
@@ -52,21 +57,17 @@ public class RecFragment extends Fragment {
                 if(!host.equals(firebaseUserEmail)){
 
                     if(inviteesList.size()>0){
-
                         for(String s: inviteesList){
-                            Log.d("333first",firebaseUserEmail);
-                            Log.d("333Second",s);
-                            Log.d("333third","####################");
-
                             if(s!=null && s.equals(firebaseUserEmail)){
                                 String name = snapshot.child("name").getValue().toString();
                                 String venue = snapshot.child("venue").getValue().toString();
                                 String time = snapshot.child("time").getValue().toString();
                                 recList.add(new RecItem(name,venue,time));
+                                eventMap.put(c,snapshot.getKey());
                                 break;
                             }
                         }
-                        recAdapter = new RecAdapter(recList, getContext());
+                        recAdapter = new RecAdapter(recList, getContext(), eventMap);
                         recyclerView.setAdapter(recAdapter);
                     }
                 }

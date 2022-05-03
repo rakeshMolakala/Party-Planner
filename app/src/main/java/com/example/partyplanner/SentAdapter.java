@@ -47,10 +47,6 @@ public class SentAdapter extends RecyclerView.Adapter<SentAdapter.ViewHolder>{
         holder.sentVenue.setText(item.getSentVenue());
         holder.sentTime.setText(item.getSentTime());
         String eventName = invMap2.get(position);
-        Log.d("888Map1",invMap.toString());
-        Log.d("888Map2",invMap2.toString());
-        Log.d("888Gap","$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
