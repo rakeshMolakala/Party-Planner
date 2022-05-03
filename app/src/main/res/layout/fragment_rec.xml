@@ -10,5 +10,4 @@
         android:layout_height="wrap_content"
         android:id="@+id/recRecycler"
         tools:ignore="MissingConstraints" />
-
 </FrameLayout>

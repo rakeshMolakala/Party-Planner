@@ -4,15 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -29,7 +26,6 @@ public class ChatFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        final FrameLayout viewPager = viewGroup.findViewById(R.id.simpleLayout);
         TabLayout tabLayout = viewGroup.findViewById(R.id.tabs);
         TabLayout.Tab tab = tabLayout.getTabAt(0);
         tab.select();
@@ -39,16 +35,13 @@ public class ChatFragment extends Fragment {
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.commit();
 
-//        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-//        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//        viewPager.setAdapter(new PagerAdapter(getFragmentManager(), tabLayout.getTabCount()));
-//        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-//        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                //viewPager.setCurrentItem(tab.getPosition());
+                selectTab(tab);
+            }
+
+            private void selectTab(TabLayout.Tab tab) {
                 Fragment fragment = null;
                 switch (tab.getPosition()) {
                     case 0:
@@ -76,19 +69,22 @@ public class ChatFragment extends Fragment {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                if (tab.getPosition() == 0) {
+                    selectTab(tab);
+                }
             }
         });
     }
 
     public class PagerAdapter extends FragmentStatePagerAdapter {
-        int mNumOfTabs;
         public String[] tabTitles = new String[]{"Chats", "Requests", "Suggestions"};
+        int mNumOfTabs;
 
         public PagerAdapter(FragmentManager fm, int NumOfTabs) {
             super(fm);
             this.mNumOfTabs = NumOfTabs;
         }
+
         @Override
         public CharSequence getPageTitle(int position) {
             return tabTitles[position];

@@ -55,7 +55,6 @@ public class HomeFragment extends Fragment {
             Intent i = new Intent(HomeFragment.this.getActivity(), EventActivity.class);
             i.putExtra("event", "birthday");
             startActivity(i);
-
         });
 
         wedding.setOnClickListener(view -> {
@@ -87,7 +86,6 @@ public class HomeFragment extends Fragment {
             i.putExtra("event", "dance");
             startActivity(i);
         });
-
         return viewGroup;
     }
 }

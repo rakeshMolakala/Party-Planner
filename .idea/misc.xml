@@ -12,16 +12,17 @@
         <entry key="app/src/main/res/drawable/chat.xml" value="0.2225" />
         <entry key="app/src/main/res/drawable/circle.xml" value="0.165" />
         <entry key="app/src/main/res/drawable/city.xml" value="0.171" />
+        <entry key="app/src/main/res/drawable/click.xml" value="0.1305" />
         <entry key="app/src/main/res/drawable/delete.xml" value="0.171" />
+        <entry key="app/src/main/res/drawable/drinks.xml" value="0.1305" />
         <entry key="app/src/main/res/drawable/edit.xml" value="0.165" />
         <entry key="app/src/main/res/drawable/editbutton_back.xml" value="0.2225" />
         <entry key="app/src/main/res/drawable/edittext_back.xml" value="0.2225" />
         <entry key="app/src/main/res/drawable/email.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/events.xml" value="0.2225" />
+        <entry key="app/src/main/res/drawable/food.xml" value="0.1305" />
         <entry key="app/src/main/res/drawable/home.xml" value="0.2225" />
-        <entry key="app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.166" />
-        <entry key="app/src/main/res/drawable/ic_delete.xml" value="0.1275" />
-        <entry key="app/src/main/res/drawable/ic_edit.xml" value="0.166" />
+        <entry key="app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.1305" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.2225" />
         <entry key="app/src/main/res/drawable/logout.xml" value="0.2225" />
         <entry key="app/src/main/res/drawable/password.xml" value="0.2225" />
@@ -30,35 +31,51 @@
         <entry key="app/src/main/res/drawable/profilepic.xml" value="0.165" />
         <entry key="app/src/main/res/drawable/progress_color.xml" value="0.165" />
         <entry key="app/src/main/res/drawable/refresh.xml" value="0.171" />
+        <entry key="app/src/main/res/drawable/send_button.xml" value="0.12" />
         <entry key="app/src/main/res/drawable/street.xml" value="0.171" />
         <entry key="app/src/main/res/drawable/todo.xml" value="0.2225" />
         <entry key="app/src/main/res/drawable/user.xml" value="0.2225" />
         <entry key="app/src/main/res/layout/activity_account.xml" value="0.2905623448943401" />
         <entry key="app/src/main/res/layout/activity_add.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_birthday.xml" value="0.19628286491387126" />
+        <entry key="app/src/main/res/layout/activity_birthday_edit1.xml" value="0.19628286491387126" />
         <entry key="app/src/main/res/layout/activity_chat.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_chat_tab_item.xml" value="0.15070921985815602" />
-        <entry key="app/src/main/res/layout/activity_chat_window.xml" value="0.15070921985815602" />
+        <entry key="app/src/main/res/layout/activity_chat_tab_item.xml" value="0.19628286491387126" />
+        <entry key="app/src/main/res/layout/activity_chat_window.xml" value="0.19628286491387126" />
+        <entry key="app/src/main/res/layout/activity_edit.xml" value="0.19628286491387126" />
         <entry key="app/src/main/res/layout/activity_editdetails.xml" value="0.3052261352539063" />
+        <entry key="app/src/main/res/layout/activity_event.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_event_invite.xml" value="0.1243209360635186" />
         <entry key="app/src/main/res/layout/activity_forgotpassword.xml" value="0.21824798583984376" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.2796610169491525" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.29583333333333334" />
         <entry key="app/src/main/res/layout/activity_preferences.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_profilepicture.xml" value="0.19628286491387126" />
-        <entry key="app/src/main/res/layout/activity_request_list_item.xml" value="0.19628286491387126" />
+        <entry key="app/src/main/res/layout/activity_request_list_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.2958099365234375" />
+        <entry key="app/src/main/res/layout/activity_viewprofile.xml" value="0.19628286491387126" />
+        <entry key="app/src/main/res/layout/dialog.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_account.xml" value="0.24701690673828128" />
         <entry key="app/src/main/res/layout/fragment_chat.xml" value="0.19628286491387126" />
+        <entry key="app/src/main/res/layout/fragment_chattab.xml" value="0.19628286491387126" />
         <entry key="app/src/main/res/layout/fragment_drinks.xml" value="0.19628286491387126" />
         <entry key="app/src/main/res/layout/fragment_events.xml" value="0.19628286491387126" />
         <entry key="app/src/main/res/layout/fragment_first.xml" value="0.19628286491387126" />
         <entry key="app/src/main/res/layout/fragment_foods.xml" value="0.19628286491387126" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.19628286491387126" />
-        <entry key="app/src/main/res/layout/fragment_todo.xml" value="0.23442840576171883" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.2430060135690789" />
+        <entry key="app/src/main/res/layout/fragment_rec.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_sent.xml" value="0.1278324070115434" />
+        <entry key="app/src/main/res/layout/fragment_todo.xml" value="0.19628286491387126" />
+        <entry key="app/src/main/res/layout/fragments_events2.xml" value="0.19628286491387126" />
         <entry key="app/src/main/res/layout/hh.xml" value="0.33765017744423687" />
+        <entry key="app/src/main/res/layout/invite_card.xml" value="0.19628286491387126" />
+        <entry key="app/src/main/res/layout/invite_card2.xml" value="0.19628286491387126" />
         <entry key="app/src/main/res/layout/item.xml" value="0.25010528564453127" />
+        <entry key="app/src/main/res/layout/message.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/received_card.xml" value="0.25240478515625" />
+        <entry key="app/src/main/res/layout/sent_card.xml" value="0.23666666666666666" />
         <entry key="app/src/main/res/layout/todo.xml" value="0.19628286491387126" />
-        <entry key="app/src/main/res/layout/todo_items.xml" value="0.14617462158203126" />
         <entry key="app/src/main/res/menu/menu.xml" value="0.2543822146216332" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_banner.xml" value="0.2225" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1555" />

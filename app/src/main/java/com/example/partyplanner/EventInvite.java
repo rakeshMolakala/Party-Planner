@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,7 +28,7 @@ import java.util.List;
 
 public class EventInvite extends AppCompatActivity {
 
-    TextView addressDisplay;
+    TextInputLayout addressDisplay;
     List<String> invitees;
     long eventCount;
     String cardID;
@@ -41,7 +40,7 @@ public class EventInvite extends AppCompatActivity {
         setContentView(R.layout.activity_event_invite);
 
         Intent i = getIntent();
-        String eventType = i.getStringExtra("event");
+        String eventType = i.getStringExtra("events");
         String invitationCard = i.getStringExtra("backgroundImage");
 
         FirebaseAuth authentication = FirebaseAuth.getInstance();
@@ -147,9 +146,9 @@ public class EventInvite extends AppCompatActivity {
                 timeHolder.setError(null);
             }
 
-            invitees.add("sushithreddy21@gmail.com");
             if (firebaseUser != null) {
-                Event event = new Event(cardID, firebaseUser.getEmail(), invitees, eventNameHolder.getEditText().getText().toString().trim(), dateHolder.getEditText().getText().toString().trim() + " " + timeHolder.getEditText().getText().toString().trim(), addressDisplay.getText().toString().trim());
+                invitees.add(firebaseUser.getEmail());
+                Event event = new Event(cardID, firebaseUser.getEmail(), invitees, eventNameHolder.getEditText().getText().toString().trim(), dateHolder.getEditText().getText().toString().trim() + " " + timeHolder.getEditText().getText().toString().trim(), addressDisplay.getEditText().getText().toString().trim());
                 reference.child(String.valueOf(eventCount + 1)).setValue(event).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(EventInvite.this, "Event has been created", Toast.LENGTH_LONG).show();

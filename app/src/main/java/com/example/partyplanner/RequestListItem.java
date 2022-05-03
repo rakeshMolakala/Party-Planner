@@ -1,15 +1,12 @@
 package com.example.partyplanner;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,7 +18,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -29,15 +25,14 @@ public class RequestListItem extends AppCompatActivity implements RequestItemLis
 
     private final String userName;
     private final String userEmail;
+    private final String requestStatus;
+    private final String photoUrl;
+    private DatabaseReference userRef;
     private DatabaseReference mDatabase;
     private FirebaseAuth authentication;
     private FirebaseUser firebaseUser;
-    private final String requestStatus;
     private String currentLoggedInUserName;
     private String userId;
-    private DatabaseReference userRef;
-    private String photoUrl;
-
 
     public RequestListItem(String userName, String requestStatus, String userEmail, String photoUrl) {
         this.userName = userName;
@@ -49,20 +44,27 @@ public class RequestListItem extends AppCompatActivity implements RequestItemLis
         userRef = mDatabase.child("Users");
         authentication = FirebaseAuth.getInstance();
         firebaseUser = authentication.getCurrentUser();
-        userId = firebaseUser.getUid();
-        userRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User user = snapshot.getValue(User.class);
-                currentLoggedInUserName = user.username;
-            }
+        if (firebaseUser != null) {
+            userId = firebaseUser.getUid();
+            userRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    User user = snapshot.getValue(User.class);
+                    if (user != null) {
+                        currentLoggedInUserName = user.username;
+                    } else {
+                        Toast.makeText(RequestListItem.this, "User not found", Toast.LENGTH_LONG).show();
+                    }
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
-
+                }
+            });
+        } else {
+            Toast.makeText(RequestListItem.this, "Could not load data at this moment", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -92,124 +94,98 @@ public class RequestListItem extends AppCompatActivity implements RequestItemLis
 
     @Override
     public void onRequestItemClick(int position, String receivingUserName, String receivingUserEmail,
-                                   String requestStatus,Context context) {
+                                   String requestStatus, Context context) {
         if (requestStatus.equals("Add Friend")) {
             makeRequest(receivingUserName, receivingUserEmail, context);
-        }
-        else if (requestStatus.equals("Accept")) {
+        } else if (requestStatus.equals("Accept")) {
             acceptRequest(receivingUserName, receivingUserEmail, context);
         }
-
     }
 
     private void acceptRequest(String requestedUserName, String receivingUserEmail,
                                Context context) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        Log.d("tag106", requestedUserName);
-        Log.d("tag107", receivingUserEmail);
         alertDialogBuilder.setMessage("Accept " + userName + "'s request?");
         alertDialogBuilder.setPositiveButton("yes",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        userRef.addChildEventListener(new ChildEventListener() {
-                            @Override
-                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                User user = dataSnapshot.getValue(User.class);
-                                Log.d("tag115", user.toString());
-                                Log.d("tag116", requestedUserName);
-                                String name = user.username;
-                                String profileImage = user.profileImage;
-                                if (name == requestedUserName) {
-                                    String firebaseUserEmail = authentication.getCurrentUser().getEmail();
-                                    List<String> requestedUserSents = user.requestsSent;
-                                    Map<String, List<String>> friendsList = user.friendsList;
-                                    String cleanEmail = cleanEmail(firebaseUserEmail);
-                                    List<String> nameProfile = new ArrayList<>();
-                                    nameProfile.add(currentLoggedInUserName);
-                                    //Log.d("tag115", firebaseUser.getPhotoUrl().toString());
-                                    if(firebaseUser.getPhotoUrl() == null) {
-                                        nameProfile.add("");
-                                    }
-                                    else {
-                                        nameProfile.add(firebaseUser.getPhotoUrl().toString());
-                                    }
-                                    //nameProfile.add(firebaseUser.getPhotoUrl().toString());
-                                    friendsList.put(cleanEmail, nameProfile);
-                                    requestedUserSents.remove(firebaseUserEmail);
-                                    dataSnapshot.getRef().child("requestsSent").setValue(requestedUserSents);
-                                    dataSnapshot.getRef().child("friendsList").setValue(friendsList);
-                                    Toast.makeText(context, "Request Accepted!", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                            }
-
-                            @Override
-                            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                            }
-
-                            @Override
-                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
-                        userRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                User details = snapshot.getValue(User.class);
-                                //Log.d("tag158", details.toString());
-                                if (details != null) {
-                                    List<String> requestsReceived = details.requestsReceived;
-                                    Map<String, List<String>> friendsList = details.friendsList;
-                                    String cleanEmail = cleanEmail(receivingUserEmail);
-
-
-                                    List<String> userPhoto = new ArrayList<>();
-                                    userPhoto.add(requestedUserName);
-                                    userPhoto.add(photoUrl);
-                                    friendsList.put(cleanEmail, userPhoto);
-
-                                    //friendsList.put(cleanEmail,  requestedUserName);
-                                    requestsReceived.remove(receivingUserEmail);
-                                    snapshot.getRef().child("requestsReceived").setValue(requestsReceived);
-                                    snapshot.getRef().child("friendsList").setValue(friendsList);
+                (arg0, arg1) -> {
+                    userRef.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
+                            User user = dataSnapshot.getValue(User.class);
+                            if (user.username.equals(requestedUserName)) {
+                                String firebaseUserEmail = authentication.getCurrentUser().getEmail();
+                                List<String> requestedUserSents = user.requestsSent;
+                                Map<String, List<String>> friendsList = user.friendsList;
+                                String cleanEmail = cleanEmail(firebaseUserEmail);
+                                List<String> nameProfile = new ArrayList<>();
+                                nameProfile.add(currentLoggedInUserName);
+                                if (firebaseUser.getPhotoUrl() == null) {
+                                    nameProfile.add("");
                                 } else {
-                                    Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                                    nameProfile.add(firebaseUser.getPhotoUrl().toString());
                                 }
-
+                                friendsList.put(cleanEmail, nameProfile);
+                                requestedUserSents.remove(firebaseUserEmail);
+                                dataSnapshot.getRef().child("requestsSent").setValue(requestedUserSents);
+                                dataSnapshot.getRef().child("friendsList").setValue(friendsList);
+                                Toast.makeText(context, "Request Accepted!", Toast.LENGTH_SHORT).show();
                             }
+                        }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    userRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            User details = snapshot.getValue(User.class);
+                            if (details != null) {
+                                List<String> requestsReceived = details.requestsReceived;
+                                Map<String, List<String>> friendsList = details.friendsList;
+                                String cleanEmail = cleanEmail(receivingUserEmail);
+                                List<String> userPhoto = new ArrayList<>();
+                                userPhoto.add(requestedUserName);
+                                userPhoto.add(photoUrl);
+                                friendsList.put(cleanEmail, userPhoto);
+                                requestsReceived.remove(receivingUserEmail);
+                                snapshot.getRef().child("requestsReceived").setValue(requestsReceived);
+                                snapshot.getRef().child("friendsList").setValue(friendsList);
+                            } else {
                                 Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
-
                             }
-                        });
+                        }
 
-                    }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 });
 
-        alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        alertDialogBuilder.setNegativeButton("No", (dialog, which) -> {
 
-            }
         });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-
     }
 
     private String cleanEmail(String email) {
@@ -217,89 +193,77 @@ public class RequestListItem extends AppCompatActivity implements RequestItemLis
     }
 
     private void makeRequest(String receivingUserName, String receivingUserEmail,
-                           Context context) {
+                             Context context) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setMessage("Send " + userName + " friend request?");
         alertDialogBuilder.setPositiveButton("yes",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        mDatabase = FirebaseDatabase.getInstance().getReference();
-                        DatabaseReference userRef = mDatabase.child("Users");
-                        authentication = FirebaseAuth.getInstance();
-                        firebaseUser = authentication.getCurrentUser();
-                        String userId = firebaseUser.getUid();
-                        userRef.addChildEventListener(new ChildEventListener() {
-                            @Override
-                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                User user = dataSnapshot.getValue(User.class);
-                                String name = user.username;
-                                if (name.equals(receivingUserName)) {
-                                    Object currReqReceived;
-                                    currReqReceived = dataSnapshot.child("requestsReceived").getValue();
-                                    List<String> currReqReceivedList = user.requestsReceived;
-                                    firebaseUser = authentication.getCurrentUser();
-                                    String firebaseUserEmail = authentication.getCurrentUser().getEmail();
-                                    currReqReceivedList.add(firebaseUserEmail);
-                                    dataSnapshot.getRef().child("requestsReceived").setValue(currReqReceivedList);
-                                    Toast.makeText(context, "Request Sent!", Toast.LENGTH_SHORT).show();
-                                }
+                (arg0, arg1) -> {
+                    mDatabase = FirebaseDatabase.getInstance().getReference();
+                    DatabaseReference userRef = mDatabase.child("Users");
+                    authentication = FirebaseAuth.getInstance();
+                    firebaseUser = authentication.getCurrentUser();
+                    String userId = firebaseUser.getUid();
+                    userRef.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            User user = dataSnapshot.getValue(User.class);
+                            String name = user.username;
+                            if (name.equals(receivingUserName)) {
+                                List<String> currReqReceivedList = user.requestsReceived;
+                                firebaseUser = authentication.getCurrentUser();
+                                String firebaseUserEmail = authentication.getCurrentUser().getEmail();
+                                currReqReceivedList.add(firebaseUserEmail);
+                                dataSnapshot.getRef().child("requestsReceived").setValue(currReqReceivedList);
+                                Toast.makeText(context, "Request Sent!", Toast.LENGTH_SHORT).show();
                             }
+                        }
 
-                            @Override
-                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                            }
+                        }
 
-                            @Override
-                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                            }
+                        }
 
-                            @Override
-                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-                            }
+                        }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                            }
-                        });
+                        }
+                    });
 
-                        userRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                User details = snapshot.getValue(User.class);
-                                if (details != null) {
-                                    List<String> requestsSent = details.requestsSent;
-                                    requestsSent.add(receivingUserEmail);
-                                    snapshot.getRef().child("requestsSent").setValue(requestsSent);
-                                } else {
-                                    Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
-                                }
-
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                    userRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            User details = snapshot.getValue(User.class);
+                            if (details != null) {
+                                List<String> requestsSent = details.requestsSent;
+                                requestsSent.add(receivingUserEmail);
+                                snapshot.getRef().child("requestsSent").setValue(requestsSent);
+                            } else {
                                 Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
-
                             }
-                        });
+                        }
 
-                    }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 });
 
-        alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        alertDialogBuilder.setNegativeButton("No", (dialog, which) -> {
 
-            }
         });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-
     }
 }

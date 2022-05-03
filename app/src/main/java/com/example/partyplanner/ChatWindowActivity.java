@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ import java.util.Map;
 
 public class ChatWindowActivity extends AppCompatActivity {
 
+    LinearLayout profileLinear;
     private FloatingActionButton sendButton;
     private TextView receiverName;
     private String receivingUserName;
@@ -41,10 +43,10 @@ public class ChatWindowActivity extends AppCompatActivity {
     private Map<String, String> emailToUser;
     private String currentLoggedInUserName;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_chat_window);
         sendButton = findViewById(R.id.sendButton);
         receiverName = findViewById(R.id.receiverName);
@@ -54,6 +56,7 @@ public class ChatWindowActivity extends AppCompatActivity {
         receivingUserEmail = i.getStringExtra("receivingUserEmail");
         senderEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         receiverName.setText(receivingUserName);
+        profileLinear = findViewById(R.id.profileLinear);
 
         currentParticipants = new ArrayList<>();
         currentParticipants.add(senderEmail);
@@ -81,91 +84,80 @@ public class ChatWindowActivity extends AppCompatActivity {
             }
         });
 
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ChatMessageModel messageModel = new ChatMessageModel(senderEmail,
-                        receivingUserEmail, message.getText().toString());
-                if (message.getText().toString().replace(" ", "").length() == 0) {
-                    Toast.makeText(ChatWindowActivity.this, "Message is empty", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                String userId = firebaseUser.getUid();
-                FirebaseDatabase.getInstance().getReference("Users").child(userId)
-                        .child("Messages").child(receivingUserName).push().setValue(messageModel).addOnCompleteListener(task1 -> {
-                    if (task1.isSuccessful()) {
-                        Toast.makeText(ChatWindowActivity.this, "Sent Message", Toast.LENGTH_LONG).show();
-                        message.setText("");
-                    } else {
-                        Toast.makeText(ChatWindowActivity.this, "Sending Message Failed", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-                FirebaseDatabase.getInstance().getReference("Users").addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        ChatMessageModel messageModel = new ChatMessageModel(senderEmail,
-                                receivingUserEmail, message.getText().toString());
-                        User user = dataSnapshot.getValue(User.class);
-                        String name = user.username;
-                        if (name.equals(receivingUserName)) {
-                            dataSnapshot.getRef().child("Messages").child(currentLoggedInUserName).push().setValue(messageModel);
-                        }
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-
-            }
+        profileLinear.setOnClickListener(view -> {
+            Intent intent = new Intent(ChatWindowActivity.this, ViewProfile.class);
+            intent.putExtra("UserName", receivingUserName);
+            startActivity(intent);
         });
 
+        sendButton.setOnClickListener(view -> {
+            ChatMessageModel messageModel = new ChatMessageModel(senderEmail,
+                    receivingUserEmail, message.getText().toString().trim());
+            if (message.getText().toString().replace(" ", "").length() == 0) {
+                Toast.makeText(ChatWindowActivity.this, "Message is empty", Toast.LENGTH_LONG).show();
+                return;
+            }
+            FirebaseUser firebaseUser1 = FirebaseAuth.getInstance().getCurrentUser();
+            String userId1 = firebaseUser1.getUid();
+            FirebaseDatabase.getInstance().getReference("Users").child(userId1)
+                    .child("Messages").child(receivingUserName).push().setValue(messageModel).addOnCompleteListener(task1 -> {
+                if (task1.isSuccessful()) {
+                    message.setText("");
+                } else {
+                    Toast.makeText(ChatWindowActivity.this, "Sending Message Failed", Toast.LENGTH_LONG).show();
+                }
+            });
 
-        ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
+            FirebaseDatabase.getInstance().getReference("Users").addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    ChatMessageModel messageModel = new ChatMessageModel(senderEmail,
+                            receivingUserEmail, message.getText().toString());
+                    User user = dataSnapshot.getValue(User.class);
+                    String name = user.username;
+                    if (name.equals(receivingUserName)) {
+                        dataSnapshot.getRef().child("Messages").child(currentLoggedInUserName).push().setValue(messageModel);
+                    }
+                }
 
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        });
+
+        ListView listOfMessages = findViewById(R.id.list_of_messages);
         adapter = new FirebaseListAdapter<ChatMessageModel>(this, ChatMessageModel.class,
                 R.layout.message, FirebaseDatabase.getInstance().getReference("Users")
                 .child(userId).child("Messages").child(receivingUserName)) {
             @Override
             protected void populateView(View v, ChatMessageModel model, int position) {
-                    TextView messageText = (TextView)v.findViewById(R.id.message_text);
-                    TextView messageUser = (TextView)v.findViewById(R.id.message_user);
-                    TextView messageTime = (TextView)v.findViewById(R.id.message_time);
+                    TextView messageText = v.findViewById(R.id.message_text);
+                    TextView messageUser = v.findViewById(R.id.message_user);
+                    TextView messageTime = v.findViewById(R.id.message_time);
 
                     messageText.setText(model.getMessage());
                     messageUser.setText(emailToUser.get(model.getSender()));
-                    // Format the date before showing it
                     messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
                             model.getMessageTime()));
-                //}
-
             }
         };
-
-
         listOfMessages.setAdapter(adapter);
     }
-
-
-
-
 }

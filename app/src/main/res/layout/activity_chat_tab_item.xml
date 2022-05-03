@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="19dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="3dp"
         app:cardUseCompatPadding="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        tools:ignore="MissingConstraints">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="70dp"
+            android:background="@color/white"
             android:orientation="horizontal">
 
             <androidx.cardview.widget.CardView
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="5dp"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
                 app:cardCornerRadius="100dp">
 
                 <ImageView
@@ -31,14 +33,15 @@
                     android:layout_height="60dp"
                     android:contentDescription="@string/profile_picture"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/user" />
+                    android:src="@drawable/user"
+                    android:background="@color/white"/>
             </androidx.cardview.widget.CardView>
 
             <LinearLayout
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="0dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -46,7 +49,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_marginStart="20dp"
-                    android:textColor="#A846F4"
+                    android:textColor="@color/black"
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
@@ -54,21 +57,11 @@
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#A846F4"
                     android:layout_marginStart="20dp"
+                    android:textColor="#666666"
                     android:textSize="13sp"
-                    android:textStyle="bold"/>
-
+                    android:textStyle="bold" />
             </LinearLayout>
-
-
         </LinearLayout>
-
-
-
     </androidx.cardview.widget.CardView>
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
