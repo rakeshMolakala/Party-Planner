@@ -48,8 +48,10 @@
         android:layout_height="match_parent"
         android:layout_above="@id/sendButton"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="60dp"
         android:layout_marginBottom="16dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="5dp" />
 
@@ -63,29 +65,14 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            app:cardCornerRadius="100dp">
-
-            <ImageView
-                android:id="@+id/profilePictureChat"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:contentDescription="@string/profile_picture"
-                android:scaleType="centerCrop"
-                android:src="@drawable/user" />
-        </androidx.cardview.widget.CardView>
-
         <TextView
             android:id="@+id/receiverName"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="2dp"
-            android:layout_marginEnd="6dp"
+            android:layout_marginEnd="5dp"
+            android:padding="5dp"
             android:text="Test"
             android:textColor="@color/white"
             android:textSize="25sp"

@@ -1,10 +1,13 @@
 package com.example.partyplanner;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,12 +44,15 @@ public class ChatWindowActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_chat_window);
+
         FloatingActionButton sendButton = findViewById(R.id.sendButton);
         TextView receiverName = findViewById(R.id.receiverName);
         message = findViewById(R.id.input);
+
         Intent i = getIntent();
         receivingUserName = i.getStringExtra("receivingUserName");
         receivingUserEmail = i.getStringExtra("receivingUserEmail");
+
         senderEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         receiverName.setText(receivingUserName);
         LinearLayout profileLinear = findViewById(R.id.profileLinear);

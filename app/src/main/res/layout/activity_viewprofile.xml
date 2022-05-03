@@ -223,6 +223,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/addressMaps"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
@@ -280,7 +281,7 @@
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
+                    android:layout_height="230dp"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="24dp"
@@ -295,7 +296,7 @@
 
                         <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="30dp"
+                            android:layout_height="40dp"
                             android:gravity="center"
                             android:text="@string/preferences"
                             android:textColor="#A846F4"
@@ -334,11 +335,7 @@
                                 <ListView
                                     android:id="@+id/foodsView"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/_12"
-                                    android:textColor="#A846F4"
-                                    android:textSize="20sp"
-                                    android:textStyle="bold" />
+                                    android:layout_height="wrap_content" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -381,11 +378,7 @@
                                 <ListView
                                     android:id="@+id/drinksView"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/_12"
-                                    android:textColor="#A846F4"
-                                    android:textSize="20sp"
-                                    android:textStyle="bold" />
+                                    android:layout_height="wrap_content"/>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>

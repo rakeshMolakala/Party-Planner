@@ -41,7 +41,10 @@ public class EventInvite extends AppCompatActivity {
         Intent i = getIntent();
         String eventType = i.getStringExtra("events");
         String invitationCard = i.getStringExtra("backgroundImage");
+        String eventName = i.getStringExtra("eventName");
         String address = i.getStringExtra("address");
+        String date2 = i.getStringExtra("date");
+        String time2 = i.getStringExtra("time");
 
         FirebaseAuth authentication = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = authentication.getCurrentUser();
@@ -98,6 +101,9 @@ public class EventInvite extends AppCompatActivity {
         Button addressButton = findViewById(R.id.addressButton);
         Button createEvent = findViewById(R.id.createEvent);
         invitees = new ArrayList<>();
+        eventNameHolder.getEditText().setText(eventName);
+        datePick.setText(date2);
+        timePick.setText(time2);
         addressPick.setText(address);
 
         Calendar calendar = Calendar.getInstance();
@@ -164,7 +170,7 @@ public class EventInvite extends AppCompatActivity {
                 reference.child(String.valueOf(eventCount + 1)).setValue(event).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(EventInvite.this, "Event has been created", Toast.LENGTH_LONG).show();
-                        Intent intent1 = new Intent(EventInvite.this, EventActivity.class);
+                        Intent intent1 = new Intent(EventInvite.this, MainActivity.class);
                         finish();
                         startActivity(intent1);
                     }
@@ -192,6 +198,9 @@ public class EventInvite extends AppCompatActivity {
             Intent intent2 = new Intent(EventInvite.this, PlacesActivity.class);
             intent2.putExtra("events", eventType);
             intent2.putExtra("backgroundImage", invitationCard);
+            intent2.putExtra("eventName", eventNameHolder.getEditText().getText().toString());
+            intent2.putExtra("date", datePick.getText().toString());
+            intent2.putExtra("time", timePick.getText().toString());
             finish();
             startActivity(intent2);
         });

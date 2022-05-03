@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,8 +25,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class ViewProfile extends AppCompatActivity {
 
@@ -35,6 +34,8 @@ public class ViewProfile extends AppCompatActivity {
     TextView eventConductedCountView, eventAttendedCountView, emailView, phoneNumberView, addressLine1View, addressLine2View, addressLine3View, preferencesView;
     ProgressBar progressbarProfileView;
     ListView foodsView, drinksView;
+    LinearLayout addressMaps;
+    String address;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +66,7 @@ public class ViewProfile extends AppCompatActivity {
         progressbarProfileView = findViewById(R.id.progressbarProfileView);
         foodsView = findViewById(R.id.foodsView);
         drinksView = findViewById(R.id.drinksView);
+        addressMaps = findViewById(R.id.addressMaps);
 
         progressbarProfileView.setVisibility(View.VISIBLE);
         if (firebaseUser == null) {
@@ -89,6 +91,7 @@ public class ViewProfile extends AppCompatActivity {
                             addressLine1View.setText(details.address.get(0));
                             addressLine2View.setText(details.address.get(1));
                             addressLine3View.setText(details.address.get(2));
+                            address = addressLine1View.getText().toString() + ", " + addressLine2View.getText().toString() + ", " + addressLine3View.getText().toString();
                             ArrayList<String> foodsArray = new ArrayList<>(details.preferences.get(0));
                             ArrayList<String> drinksArray = new ArrayList<>(details.preferences.get(1));
                             ArrayAdapter<String> foodsAdapter = new ArrayAdapter<>(ViewProfile.this, android.R.layout.simple_list_item_1, foodsArray);
@@ -123,5 +126,27 @@ public class ViewProfile extends AppCompatActivity {
                 }
             });
         }
+
+        emailView.setOnClickListener(view -> {
+            Intent myIntent = new Intent(Intent.ACTION_SEND);
+            myIntent.setType("message/rfc822");
+            startActivity(myIntent);
+        });
+
+        phoneNumberView.setOnClickListener(view -> {
+            Intent myIntent = new Intent(Intent.ACTION_DIAL);
+            String phNum = "tel:" + phoneNumberView.getText();
+            myIntent.setData(Uri.parse(phNum));
+            startActivity(myIntent);
+        });
+
+        addressMaps.setOnClickListener(view -> {
+            if (address.length()>5) {
+                Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+            }
+        });
     }
 }

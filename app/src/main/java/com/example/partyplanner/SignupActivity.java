@@ -102,7 +102,7 @@ public class SignupActivity extends AppCompatActivity {
                 phoneNumberHolder.setError(null);
             }
 
-            if (phone.length() < 10) {
+            if (phoneNumberHolder.getEditText().getText().toString().trim().length() != 10) {
                 phoneNumberHolder.setError("Phone number must consist of atleast 10 digits!");
                 phoneNumberHolder.requestFocus();
                 return;
