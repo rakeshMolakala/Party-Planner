@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,10 +20,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ViewProfile extends AppCompatActivity {
 
@@ -34,8 +35,12 @@ public class ViewProfile extends AppCompatActivity {
     TextView eventConductedCountView, eventAttendedCountView, emailView, phoneNumberView, addressLine1View, addressLine2View, addressLine3View, preferencesView;
     ProgressBar progressbarProfileView;
     ListView foodsView, drinksView;
-    LinearLayout addressMaps;
-    String address;
+
+    private TextView hostedView;
+    private TextView invitedView;
+    private int hosted = 0;
+    private int invited = 0;
+    private String currUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,12 +50,12 @@ public class ViewProfile extends AppCompatActivity {
 
         Intent i = getIntent();
         userName = i.getStringExtra("UserName");
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
         FirebaseAuth authentication = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = authentication.getCurrentUser();
 
@@ -66,7 +71,10 @@ public class ViewProfile extends AppCompatActivity {
         progressbarProfileView = findViewById(R.id.progressbarProfileView);
         foodsView = findViewById(R.id.foodsView);
         drinksView = findViewById(R.id.drinksView);
-        addressMaps = findViewById(R.id.addressMaps);
+
+        hostedView = findViewById(R.id.eventConductedCountView);
+        invitedView = findViewById(R.id.eventAttendedCountView);
+
 
         progressbarProfileView.setVisibility(View.VISIBLE);
         if (firebaseUser == null) {
@@ -80,6 +88,7 @@ public class ViewProfile extends AppCompatActivity {
                     if (details != null) {
                         String name = details.username;
                         if (name.equals(userName)) {
+
                             if (details.profileImage.length() == 5) {
                                 profilePictureView.setImageResource(R.drawable.user);
                             } else {
@@ -91,7 +100,6 @@ public class ViewProfile extends AppCompatActivity {
                             addressLine1View.setText(details.address.get(0));
                             addressLine2View.setText(details.address.get(1));
                             addressLine3View.setText(details.address.get(2));
-                            address = addressLine1View.getText().toString() + ", " + addressLine2View.getText().toString() + ", " + addressLine3View.getText().toString();
                             ArrayList<String> foodsArray = new ArrayList<>(details.preferences.get(0));
                             ArrayList<String> drinksArray = new ArrayList<>(details.preferences.get(1));
                             ArrayAdapter<String> foodsAdapter = new ArrayAdapter<>(ViewProfile.this, android.R.layout.simple_list_item_1, foodsArray);
@@ -127,26 +135,80 @@ public class ViewProfile extends AppCompatActivity {
             });
         }
 
-        emailView.setOnClickListener(view -> {
-            Intent myIntent = new Intent(Intent.ACTION_SEND);
-            myIntent.setType("message/rfc822");
-            startActivity(myIntent);
-        });
+        DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference();
 
-        phoneNumberView.setOnClickListener(view -> {
-            Intent myIntent = new Intent(Intent.ACTION_DIAL);
-            String phNum = "tel:" + phoneNumberView.getText();
-            myIntent.setData(Uri.parse(phNum));
-            startActivity(myIntent);
-        });
+        DatabaseReference dataSnapshot = reference1.child("Users");
+        dataSnapshot.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                String currUserName = snapshot.child("username").getValue().toString();
+                if(userName.equals(currUserName)){
+                    currUser = snapshot.child("email").getValue().toString();
+                    DatabaseReference dataSnapshot2 = reference1.child("Events");
+                    dataSnapshot2.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                            String host = snapshot.child("host").getValue().toString();
+                            Object invitees = snapshot.child("invitees").getValue();
+                            List<String> inviteesList = (List<String>) invitees;
+                            if(host.equals(currUser)){
+                                hosted++;
+                                hostedView.setText(String.valueOf(hosted));
 
-        addressMaps.setOnClickListener(view -> {
-            if (address.length()>5) {
-                Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                startActivity(mapIntent);
+                            }
+                            else {
+                                if(inviteesList.size()>0 && inviteesList.contains(currUser)){
+                                    invited++;
+                                    invitedView.setText(String.valueOf(invited));
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+
+                    });
+
+                }
             }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
         });
     }
 }
