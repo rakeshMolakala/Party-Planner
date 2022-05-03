@@ -28,7 +28,6 @@ import java.util.List;
 
 public class EventInvite extends AppCompatActivity {
 
-    TextInputLayout addressDisplay;
     List<String> invitees;
     long eventCount;
     String cardID;
@@ -42,6 +41,7 @@ public class EventInvite extends AppCompatActivity {
         Intent i = getIntent();
         String eventType = i.getStringExtra("events");
         String invitationCard = i.getStringExtra("backgroundImage");
+        String address = i.getStringExtra("address");
 
         FirebaseAuth authentication = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = authentication.getCurrentUser();
@@ -93,10 +93,12 @@ public class EventInvite extends AppCompatActivity {
         TextInputEditText timePick = findViewById(R.id.time);
         Button dateButton = findViewById(R.id.dateButton);
         Button timeButton = findViewById(R.id.timeButton);
-        addressDisplay = findViewById(R.id.addressDisplay);
+        TextInputLayout addressDisplayHolder = findViewById(R.id.addressDisplayHolder);
+        TextInputEditText addressPick = findViewById(R.id.addressDisplay);
         Button addressButton = findViewById(R.id.addressButton);
         Button createEvent = findViewById(R.id.createEvent);
         invitees = new ArrayList<>();
+        addressPick.setText(address);
 
         Calendar calendar = Calendar.getInstance();
 
@@ -131,6 +133,7 @@ public class EventInvite extends AppCompatActivity {
             } else {
                 eventNameHolder.setError(null);
             }
+
             if (dateHolder.getEditText().getText().toString().isEmpty()) {
                 dateHolder.setError("Date is required!");
                 dateHolder.requestFocus();
@@ -138,6 +141,7 @@ public class EventInvite extends AppCompatActivity {
             } else {
                 dateHolder.setError(null);
             }
+
             if (timeHolder.getEditText().getText().toString().isEmpty()) {
                 timeHolder.setError("Time is required!");
                 timeHolder.requestFocus();
@@ -146,15 +150,23 @@ public class EventInvite extends AppCompatActivity {
                 timeHolder.setError(null);
             }
 
+            if (addressDisplayHolder.getEditText().getText().toString().isEmpty()) {
+                addressDisplayHolder.setError("Address is required!");
+                addressDisplayHolder.requestFocus();
+                return;
+            } else {
+                addressDisplayHolder.setError(null);
+            }
+
             if (firebaseUser != null) {
                 invitees.add(firebaseUser.getEmail());
-                Event event = new Event(cardID, firebaseUser.getEmail(), invitees, eventNameHolder.getEditText().getText().toString().trim(), dateHolder.getEditText().getText().toString().trim() + " " + timeHolder.getEditText().getText().toString().trim(), addressDisplay.getEditText().getText().toString().trim());
+                Event event = new Event(cardID, firebaseUser.getEmail(), invitees, eventNameHolder.getEditText().getText().toString().trim(), dateHolder.getEditText().getText().toString().trim() + " " + timeHolder.getEditText().getText().toString().trim(), addressDisplayHolder.getEditText().getText().toString().trim());
                 reference.child(String.valueOf(eventCount + 1)).setValue(event).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(EventInvite.this, "Event has been created", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(EventInvite.this, EventActivity.class);
+                        Intent intent1 = new Intent(EventInvite.this, EventActivity.class);
                         finish();
-                        startActivity(intent);
+                        startActivity(intent1);
                     }
                 });
             }
@@ -177,7 +189,11 @@ public class EventInvite extends AppCompatActivity {
         });
 
         addressButton.setOnClickListener(view -> {
-
+            Intent intent2 = new Intent(EventInvite.this, PlacesActivity.class);
+            intent2.putExtra("events", eventType);
+            intent2.putExtra("backgroundImage", invitationCard);
+            finish();
+            startActivity(intent2);
         });
     }
 }

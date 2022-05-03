@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +23,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class ViewProfile extends AppCompatActivity {
 
     String userName;
@@ -28,6 +34,7 @@ public class ViewProfile extends AppCompatActivity {
     TextView accountNameView;
     TextView eventConductedCountView, eventAttendedCountView, emailView, phoneNumberView, addressLine1View, addressLine2View, addressLine3View, preferencesView;
     ProgressBar progressbarProfileView;
+    ListView foodsView, drinksView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,8 +62,9 @@ public class ViewProfile extends AppCompatActivity {
         addressLine1View = findViewById(R.id.addressLine1View);
         addressLine2View = findViewById(R.id.addressLine2View);
         addressLine3View = findViewById(R.id.addressLine3View);
-        preferencesView = findViewById(R.id.preferencesView);
         progressbarProfileView = findViewById(R.id.progressbarProfileView);
+        foodsView = findViewById(R.id.foodsView);
+        drinksView = findViewById(R.id.drinksView);
 
         progressbarProfileView.setVisibility(View.VISIBLE);
         if (firebaseUser == null) {
@@ -81,6 +89,12 @@ public class ViewProfile extends AppCompatActivity {
                             addressLine1View.setText(details.address.get(0));
                             addressLine2View.setText(details.address.get(1));
                             addressLine3View.setText(details.address.get(2));
+                            ArrayList<String> foodsArray = new ArrayList<>(details.preferences.get(0));
+                            ArrayList<String> drinksArray = new ArrayList<>(details.preferences.get(1));
+                            ArrayAdapter<String> foodsAdapter = new ArrayAdapter<>(ViewProfile.this, android.R.layout.simple_list_item_1, foodsArray);
+                            ArrayAdapter<String> drinksAdapter = new ArrayAdapter<>(ViewProfile.this, android.R.layout.simple_list_item_1, drinksArray);
+                            foodsView.setAdapter(foodsAdapter);
+                            drinksView.setAdapter(drinksAdapter);
                         }
                     } else {
                         Toast.makeText(ViewProfile.this, "User not found!!", Toast.LENGTH_LONG).show();

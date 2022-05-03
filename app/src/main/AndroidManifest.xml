@@ -8,8 +8,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -20,24 +18,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Partyplanner">
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/api_key" />
+
+        <activity
+            android:name=".PlacesActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
 
         <activity
             android:name=".EventInvite"
             android:configChanges="orientation|screenSize"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
 
         <activity
             android:name=".EventActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false" />
+
         <activity
             android:name=".ViewProfile"
             android:configChanges="orientation|screenSize"
             android:exported="false" />
+
         <activity
             android:name=".PreferencesActivity"
             android:configChanges="orientation|screenSize"
@@ -66,34 +67,43 @@
         <activity
             android:name=".ChatWindowActivity"
             android:exported="false" />
+
         <activity
             android:name=".ChatTabItem"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="Instantiatable" />
+
         <activity
             android:name=".RequestListItem"
             android:configChanges="orientation|screenSize"
             android:exported="false"
             tools:ignore="Instantiatable" />
+
         <activity
             android:name=".ProfilePictureActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false" />
+
         <activity
             android:name=".EditDetailsActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false" />
+
         <activity
             android:name=".ForgotPasswordActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false" />
+
         <activity
             android:name=".SignupActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false" />
+
         <activity
             android:name=".LoginActivity"
             android:configChanges="orientation|screenSize"

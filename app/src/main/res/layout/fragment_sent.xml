@@ -6,8 +6,8 @@
     tools:context=".SentFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/sentRecycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/sentRecycler"
-        tools:ignore="MissingConstraints" />
+        android:layout_marginBottom="65dp" />
 </FrameLayout>

@@ -2,11 +2,9 @@ package com.example.partyplanner;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -29,11 +27,10 @@ public class InviteAdapter extends RecyclerView.Adapter<InviteAdapter.ViewHolder
         this.arrList = new ArrayList<>();
     }
 
-
     @NonNull
     @Override
     public InviteAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        v = LayoutInflater.from(context).inflate(R.layout.invite_card,parent,false);
+        v = LayoutInflater.from(context).inflate(R.layout.invite_card, parent, false);
         return new ViewHolder(v);
     }
 
@@ -44,10 +41,9 @@ public class InviteAdapter extends RecyclerView.Adapter<InviteAdapter.ViewHolder
         holder.invEmail.setText(item.getEmail());
         holder.checkBox.setChecked(item.getChecked());
         holder.checkBox.setOnClickListener(view -> {
-            if(holder.checkBox.isChecked()){
+            if (holder.checkBox.isChecked()) {
                 arrList.add(invList.get(position));
-            }
-            else{
+            } else {
                 arrList.remove(invList.get(position));
             }
         });
@@ -58,6 +54,10 @@ public class InviteAdapter extends RecyclerView.Adapter<InviteAdapter.ViewHolder
         return invList.size();
     }
 
+    public ArrayList<InviteItem> getCheckedList() {
+        return arrList;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView invName;
         public TextView invEmail;
@@ -65,14 +65,9 @@ public class InviteAdapter extends RecyclerView.Adapter<InviteAdapter.ViewHolder
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            invName = (TextView) itemView.findViewById(R.id.invName);
-            invEmail = (TextView) itemView.findViewById(R.id.invEmail);
-            checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
+            invName = itemView.findViewById(R.id.invName);
+            invEmail = itemView.findViewById(R.id.invEmail);
+            checkBox = itemView.findViewById(R.id.checkBox);
         }
     }
-
-    public ArrayList<InviteItem> getCheckedList(){
-        return arrList;
-    }
-
 }

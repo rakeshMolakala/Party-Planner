@@ -1,6 +1,5 @@
 package com.example.partyplanner;
 
-import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
@@ -34,7 +33,6 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -116,7 +114,6 @@ public class EditDetailsActivity extends AppCompatActivity {
             });
         }
 
-
         changePhoto.setOnClickListener(view -> ImagePicker.Companion.with(EditDetailsActivity.this).crop().cropOval().start());
 
         editPhoto.setOnClickListener(view -> ImagePicker.Companion.with(EditDetailsActivity.this).crop().cropOval().start());
@@ -164,8 +161,7 @@ public class EditDetailsActivity extends AppCompatActivity {
             String currUserPhotoUrl;
             if (firebaseUser.getPhotoUrl() != null) {
                 currUserPhotoUrl = firebaseUser.getPhotoUrl().toString();
-            }
-            else {
+            } else {
                 currUserPhotoUrl = "\"jkh\"";
             }
             User user = new User(Username, firebaseUser.getEmail(), phone, address,

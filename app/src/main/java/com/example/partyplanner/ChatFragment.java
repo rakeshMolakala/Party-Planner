@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.tabs.TabLayout;
 
 public class ChatFragment extends Fragment {
-    ViewGroup viewGroup;
+    private ViewGroup viewGroup;
 
     @Nullable
     @Override
@@ -89,7 +89,6 @@ public class ChatFragment extends Fragment {
         public CharSequence getPageTitle(int position) {
             return tabTitles[position];
         }
-
 
         @Override
         public Fragment getItem(int position) {
