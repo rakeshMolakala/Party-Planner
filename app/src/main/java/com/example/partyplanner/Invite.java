@@ -2,7 +2,6 @@ package com.example.partyplanner;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -101,7 +100,6 @@ public class Invite extends AppCompatActivity {
             ArrayList<String> newInvitees = new ArrayList<>();
             checkedInvites = invAdapter.getCheckedList();
             for (InviteItem inv : checkedInvites) {
-                Log.d("666EmailFault", inv.getEmail());
                 newInvitees.add(inv.getEmail());
             }
 

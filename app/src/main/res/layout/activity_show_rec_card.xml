@@ -51,11 +51,12 @@
         </TextView>
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="210dp"
             android:layout_height="wrap_content"
             android:id="@+id/venueR"
             android:text="event_venue"
             android:textAlignment="center"
+            android:layout_marginLeft="100dp"
             android:paddingTop="50dp"
             android:textSize="20sp"
             android:textStyle="bold">

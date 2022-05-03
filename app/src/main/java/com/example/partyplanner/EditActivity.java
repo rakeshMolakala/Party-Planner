@@ -26,8 +26,10 @@ public class EditActivity extends AppCompatActivity {
     private String currEvent;
     private DatabaseReference nameSnapshot;
     private DatabaseReference timeSnapshot;
+    private DatabaseReference addressSnapShot;
     private String prevTime;
     private String prevDate;
+    private String newEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +39,34 @@ public class EditActivity extends AppCompatActivity {
         Button cancel = findViewById(R.id.cancel);
         eventName = findViewById(R.id.event_name);
         Bundle extras = getIntent().getExtras();
-        currEvent = (String) extras.get("eventName");
+        String type1 =  (String) extras.get("type");
+        if(type1.equals("sentFrag")){
+            currEvent = (String) extras.get("eventName");
+        }
+
         Button timeButton = findViewById(R.id.timeButton1);
         Button dateButton = findViewById(R.id.dateButton1);
+        Button addressButton = findViewById(R.id.addressButtonEdit);
         TextInputEditText datePick = findViewById(R.id.date);
         TextInputEditText timePick = findViewById(R.id.time);
+        TextInputEditText addressPick = findViewById(R.id.addressDisplayEdit);
+
+        Intent i = getIntent();
+        String address = i.getStringExtra("address");
+        if(address!=null){
+            addressPick.setText(address);
+        }
+        String type = i.getStringExtra("type");
+        if(type!=null && type.equals("venue")){
+            prevTime = i.getStringExtra("prevTime");
+            prevDate = i.getStringExtra("prevDate");
+            newEvent = i.getStringExtra("eventName");
+            currEvent = i.getStringExtra("currEvent");
+            eventName.setText(newEvent);
+            datePick.setText(prevDate);
+            timePick.setText(prevTime);
+        }
+
 
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -66,8 +91,10 @@ public class EditActivity extends AppCompatActivity {
                 if (event.equals(currEvent)) {
                     nameSnapshot = snapshot.getRef().child("name");
                     timeSnapshot = snapshot.getRef().child("time");
+                    addressSnapShot = snapshot.getRef().child("venue");
+
                     String x = snapshot.child("time").getValue().toString();
-                    ;
+
                     String[] arr = x.split(" ");
                     prevDate = arr[0];
                     prevTime = arr[2];
@@ -96,14 +123,19 @@ public class EditActivity extends AppCompatActivity {
         });
 
         ok.setOnClickListener(view -> {
-            String newEvent = eventName.getText().toString();
+            newEvent = eventName.getText().toString();
             if (newEvent.length() > 0) {
                 nameSnapshot.setValue(newEvent);
                 timeSnapshot.setValue(prevDate + " at " + prevTime);
+                addressSnapShot.setValue(address);
+
                 Toast.makeText(getApplicationContext(), "Details changed", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 finish();
                 startActivity(intent);
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Event Name should be filled at least ", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -123,6 +155,16 @@ public class EditActivity extends AppCompatActivity {
                 prevTime = timePick.getText().toString();
             }, hour, minute, true);
             timePickerDialog.show();
+        });
+
+        addressButton.setOnClickListener(view -> {
+            Intent intent2 = new Intent(EditActivity.this, EditVenue.class);
+            intent2.putExtra("currEvent", currEvent);
+            intent2.putExtra("eventName", eventName.getText().toString());
+            intent2.putExtra("prevDate", prevDate);
+            intent2.putExtra("prevTime", prevTime);
+            finish();
+            startActivity(intent2);
         });
     }
 }

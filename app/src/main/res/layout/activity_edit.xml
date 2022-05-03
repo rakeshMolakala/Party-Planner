@@ -1,47 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:id="@+id/eventBackground"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+
+<ScrollView
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".EditActivity">
+    android:layout_height="match_parent">
 
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="100dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/cancel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <EditText
-            android:id="@+id/event_name"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="100dp"
-            android:hint="Event Name"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="225dp"
+            android:layout_marginRight="16dp"
+            android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/dateHolder"
+                android:id="@+id/eventNameHolder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="6dp"
-                android:layout_weight="1"
                 android:ems="10"
                 android:textColorHint="#666666"
                 app:boxStrokeWidth="0dp"
@@ -50,40 +33,106 @@
                 app:endIconTint="#A846F4">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/date"
+                    android:id="@+id/event_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autofillHints=""
                     android:background="@drawable/edittext_back"
                     android:ems="10"
-                    android:hint="Date"
-                    android:inputType="date"
+                    android:hint="Event Name"
+                    android:inputType="textCapWords"
                     android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
-                android:id="@+id/dateButton1"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="8dp"
-                android:layout_weight="1"
-                android:text="Pick Date" />
-        </LinearLayout>
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="87dp"
-            android:orientation="horizontal"
-            android:weightSum="2">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/dateHolder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:textColorHint="#666666"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="#A846F4">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints=""
+                        android:background="@drawable/edittext_back"
+                        android:ems="10"
+                        android:hint="Date"
+                        android:inputType="date"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/dateButton1"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:text="Pick Date" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/timeHolder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:textColorHint="#666666"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="#A846F4">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints=""
+                        android:background="@drawable/edittext_back"
+                        android:ems="10"
+                        android:hint="Time"
+                        android:inputType="date"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/timeButton1"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:text="Pick Time" />
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/timeHolder"
+                android:id="@+id/addressDisplayHolderEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_marginRight="6dp"
-                android:layout_weight="1"
                 android:ems="10"
                 android:textColorHint="#666666"
                 app:boxStrokeWidth="0dp"
@@ -92,55 +141,49 @@
                 app:endIconTint="#A846F4">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/time"
+                    android:id="@+id/addressDisplayEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autofillHints=""
                     android:background="@drawable/edittext_back"
                     android:ems="10"
-                    android:hint="Time"
-                    android:inputType="date"
+                    android:hint="Event Address"
+                    android:inputType="textCapWords"
                     android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/timeButton1"
+                android:id="@+id/addressButtonEdit"
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="8dp"
-                android:layout_weight="1"
-                android:text="Pick Time" />
+                android:layout_marginTop="16dp"
+                android:text="Select location" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="50dp"
+                    android:text="CANCEL" />
+
+                <Button
+                    android:id="@+id/ok"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="30dp"
+                    android:text="OK" />
+
+
+            </LinearLayout>
+
         </LinearLayout>
-
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/ok"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="72dp"
-        android:text="Ok"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/cancel"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        app:layout_constraintVertical_bias="0.182" />
-
-    <Button
-        android:id="@+id/cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="107dp"
-        android:layout_marginBottom="168dp"
-        android:text="Cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ok"
-        app:layout_constraintHorizontal_bias="0.479"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
-
-
+    </RelativeLayout>
+</ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,6 @@
 package com.example.partyplanner;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +39,6 @@ public class RecFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_rec, container, false);
         FirebaseAuth authentication = FirebaseAuth.getInstance();
         String firebaseUserEmail = authentication.getCurrentUser().getEmail();
-        Log.d("123USerEMail",""+firebaseUserEmail);
         RecyclerView recyclerView = v.findViewById(R.id.recRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
 
@@ -54,23 +51,16 @@ public class RecFragment extends Fragment {
                 Object invitees = snapshot.child("invitees").getValue();
                 String host = snapshot.child("host").getValue().toString();
                 List<String> inviteesList = (List<String>) invitees;
-                if(!host.equals(firebaseUserEmail)){
-
-                    if(inviteesList.size()>0){
-                        for(String s: inviteesList){
-                            if(s!=null && s.equals(firebaseUserEmail)){
-                                String name = snapshot.child("name").getValue().toString();
-                                String venue = snapshot.child("venue").getValue().toString();
-                                String time = snapshot.child("time").getValue().toString();
-                                recList.add(new RecItem(name,venue,time));
-                                eventMap.put(c,snapshot.getKey());
-                                break;
-                            }
-                        }
-                        recAdapter = new RecAdapter(recList, getContext(), eventMap);
-                        recyclerView.setAdapter(recAdapter);
-                    }
+                if(!host.equals(firebaseUserEmail) && inviteesList.size()>0 && inviteesList.contains(firebaseUserEmail)){
+                    String name = snapshot.child("name").getValue().toString();
+                    String venue = snapshot.child("venue").getValue().toString();
+                    String time = snapshot.child("time").getValue().toString();
+                    recList.add(new RecItem(name,venue,time));
+                    eventMap.put(c,snapshot.getKey());
+                    c++;
                 }
+                recAdapter = new RecAdapter(recList, getContext(), eventMap);
+                recyclerView.setAdapter(recAdapter);
 
 
             }

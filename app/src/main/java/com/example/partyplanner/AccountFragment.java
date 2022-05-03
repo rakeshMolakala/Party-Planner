@@ -3,6 +3,7 @@ package com.example.partyplanner;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +20,15 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 public class AccountFragment extends Fragment {
     private TextView accountName;
@@ -35,6 +39,12 @@ public class AccountFragment extends Fragment {
     private TextView addressLine3Account;
     private ProgressBar progressbar;
     private ViewGroup viewGroup;
+    private TextView hostedView;
+    private TextView invitedView;
+    private int hosted = 0;
+    private int invited = 0;
+    private String currUser;
+
 
     @Nullable
     @Override
@@ -62,6 +72,54 @@ public class AccountFragment extends Fragment {
         ImageView profilePicture = viewGroup.findViewById(R.id.profilePicture);
         progressbar = viewGroup.findViewById(R.id.progressbarLogout);
 
+        currUser = firebaseUser.getEmail();
+        hostedView = viewGroup.findViewById(R.id.eventConductedCount);
+        invitedView = viewGroup.findViewById(R.id.eventAttendedCount);
+
+        DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference();
+
+        DatabaseReference dataSnapshot = reference1.child("Events");
+        dataSnapshot.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                String host = snapshot.child("host").getValue().toString();
+                Object invitees = snapshot.child("invitees").getValue();
+                List<String> inviteesList = (List<String>) invitees;
+                if(host.equals(currUser)){
+                    hosted++;
+                }
+                else {
+                    if(inviteesList.size()>0 && inviteesList.contains(currUser)){
+                        invited++;
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
+
+
+
+
         progressbar.setVisibility(View.VISIBLE);
         if (firebaseUser == null) {
             Toast.makeText(AccountFragment.this.getActivity(), "Something went wrong! Your credentials are not available at the moment", Toast.LENGTH_LONG).show();
@@ -85,6 +143,8 @@ public class AccountFragment extends Fragment {
                         addressLine1Account.setText(details.address.get(0));
                         addressLine2Account.setText(details.address.get(1));
                         addressLine3Account.setText(details.address.get(2));
+                        hostedView.setText(String.valueOf(hosted));
+                        invitedView.setText(String.valueOf(invited));
                     } else {
                         Toast.makeText(AccountFragment.this.getActivity(), "User not found!!", Toast.LENGTH_LONG).show();
                     }

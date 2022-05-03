@@ -1,13 +1,10 @@
 package com.example.partyplanner;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -63,22 +60,15 @@ public class SentFragment extends Fragment {
                     inviteesMap2.put(c,eventName);
                     c++;
 
-                    Log.d("100",firebaseUserEmail);
                     String name = snapshot.child("name").getValue().toString();
                     String venue = snapshot.child("venue").getValue().toString();
                     String time = snapshot.child("time").getValue().toString();
                     sentList.add(new SentItem(name,venue,time));
                 }
 
-                Log.d("1234Map",inviteesMap.toString());
-//                Log.d("1234EventName",eventName);
-
                 sentAdapter = new SentAdapter(sentList, getContext(),inviteesMap,inviteesMap2);
                 recyclerView.setAdapter(sentAdapter);
 
-                if(sentList.size()>0){
-                    Log.d("200",""+sentAdapter.getEditId(0));
-                }
 
             }
 

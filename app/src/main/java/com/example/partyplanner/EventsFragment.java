@@ -1,7 +1,6 @@
 package com.example.partyplanner;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,12 +66,10 @@ public class EventsFragment extends Fragment {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                Log.d("73", "asdf");
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                Log.d("77", "asdf");
                 if (tab.getPosition() == 0) {
                     selectTab(tab);
                 }

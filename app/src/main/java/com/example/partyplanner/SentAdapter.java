@@ -69,6 +69,8 @@ public class SentAdapter extends RecyclerView.Adapter<SentAdapter.ViewHolder>{
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             Bundle extras = new Bundle();
             extras.putString("eventName",eventName);
+            extras.putString("type","sentFrag");
+
             intent.putExtras(extras);
             context.startActivity(intent);
         });
