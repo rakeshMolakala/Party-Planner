@@ -81,9 +81,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendNotification(String sentUser, String message) {
-//        int sentImageInt = Integer.parseInt(sentImage);
-//        int sendingImage = 0;
-        Log.d("Notification1992", "Start of notification");
         Bitmap icon = BitmapFactory.decodeResource(getResources(),
                 R.drawable.user);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this,
@@ -105,6 +102,5 @@ public class MainActivity extends AppCompatActivity {
         builder.setChannelId(NOTIFICATION_CHANNEL_ID);
         mngr.createNotificationChannel(channel);
         mngr.notify((int) System.currentTimeMillis(), builder.build());
-        Log.d("Notif1993", "End of notification");
     }
 }
