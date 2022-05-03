@@ -1,6 +1,7 @@
 package com.example.partyplanner;
 
 import android.content.DialogInterface;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +29,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class ToDoFragment extends Fragment {
 
@@ -91,6 +96,111 @@ public class ToDoFragment extends Fragment {
         createRecyclerView(container);
     }
 
+    ItemTouchHelper simpleCallBack = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        TodoModel deletedItem = null;
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            int position = viewHolder.getAdapterPosition();
+            TodoModel selectedTask = todoModels.get(position);
+            String userId = firebaseUser.getUid();
+
+            switch (direction) {
+                case ItemTouchHelper.RIGHT:
+                    final EditText editTextName = new EditText(getContext());
+                    editTextName.setHint("Enter Updated Task");
+                    editTextName.setText(selectedTask.getText());
+                    androidx.appcompat.app.AlertDialog.Builder alert1 = new AlertDialog.Builder(getActivity());
+                    alert1.setMessage("Edit task");
+                    alert1.setView(editTextName);
+                    alert1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            String YouEditStringValue = editTextName.getText().toString();
+                            if (YouEditStringValue == null || YouEditStringValue.trim().equals("")) {
+
+                            } else {
+                                int position = viewHolder.getAdapterPosition();
+                                FirebaseDatabase.getInstance().getReference("Users").child(userId)
+                                        .child("Tasks/" + selectedTask.getKey() + "/text").setValue(YouEditStringValue).addOnCompleteListener(task1 -> {
+                                    if (task1.isSuccessful()) {
+                                        Toast.makeText(ToDoFragment.this.getActivity(), "Task Updated", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(ToDoFragment.this.getActivity(), "Could not update task", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                                todoAdapter.notifyItemChanged(position);
+                            }
+                        }
+                    });
+                    alert1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    });
+                    alert1.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            todoAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                        }
+                    });
+                    alert1.show();
+                    break;
+                case ItemTouchHelper.LEFT:
+                    androidx.appcompat.app.AlertDialog.Builder alert2 = new AlertDialog.Builder(getActivity());
+                    alert2.setMessage("Are you sure you want to delete?");
+                    alert2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            int position = viewHolder.getAdapterPosition();
+                            deletedItem = todoModels.get(position);
+                            FirebaseDatabase.getInstance().getReference("Users").child(userId)
+                                    .child("Tasks/" + selectedTask.getKey()).removeValue().addOnCompleteListener(del -> {
+                                if (del.isSuccessful()) {
+                                    Toast.makeText(ToDoFragment.this.getActivity(), "Task: " + selectedTask.getText() + " deleted", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(ToDoFragment.this.getActivity(), "Could not delete task", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                            todoAdapter.notifyItemRemoved(position);
+                            dialogInterface.cancel();
+                        }
+                    });
+                    alert2.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    });
+                    alert2.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            todoAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                        }
+                    });
+                    alert2.show();
+                    break;
+            }
+        }
+
+        @Override
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+
+            new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.holo_red_light))
+                    .addSwipeLeftActionIcon(R.drawable.ic_delete)
+                    .addSwipeRightBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.holo_green_light))
+                    .addSwipeRightActionIcon(R.drawable.ic_edit)
+                    .create()
+                    .decorate();
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+    });
+
     void getTodoList() {
         String userId = firebaseUser.getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users")
@@ -132,6 +242,7 @@ public class ToDoFragment extends Fragment {
         todoAdapter.setOnItemClickListener(todoListener);
         todoRecyclerView.setAdapter(todoAdapter);
         todoRecyclerView.setLayoutManager(rLayoutManger);
+        simpleCallBack.attachToRecyclerView(todoRecyclerView);
     }
 }
 
