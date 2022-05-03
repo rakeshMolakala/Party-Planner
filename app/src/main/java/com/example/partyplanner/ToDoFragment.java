@@ -43,6 +43,45 @@ public class ToDoFragment extends Fragment {
         todoRecyclerView = viewGroup.findViewById(R.id.todo_view);
 
         FloatingActionButton fab = viewGroup.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final EditText editTextName = new EditText(getContext());
+                editTextName.setHint("Enter New Task");
+                androidx.appcompat.app.AlertDialog.Builder addAlert = new AlertDialog.Builder(getActivity());
+                addAlert.setMessage("Add New Task");
+                addAlert.setView(editTextName);
+
+                addAlert.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String task = editTextName.getText().toString();
+
+                        if (task == null || task.trim().equals("")) {
+                            Snackbar.make(view, "Please Enter Some Task", Snackbar.LENGTH_LONG)
+                                    .setAction("Dismiss", null).show();
+                        } else {
+                            TodoModel newtodoModel = new TodoModel(false, task);
+                            String userId = firebaseUser.getUid();
+                            FirebaseDatabase.getInstance().getReference("Users").child(userId)
+                                    .child("Tasks").push().setValue(newtodoModel).addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    Toast.makeText(ToDoFragment.this.getActivity(), "Task added", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(ToDoFragment.this.getActivity(), "Could not add task", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                    }
+                });
+                addAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+                addAlert.show();
+            }
+        });
 
         init(viewGroup);
         return viewGroup;    }
