@@ -54,15 +54,15 @@ public class SentFragment extends Fragment {
         dataSnapshot.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                String eventName = snapshot.getKey();
                 String host = snapshot.child("host").getValue().toString();
-
-
-                Object invitees = snapshot.child("invitees").getValue();
-                inviteesMap.put(eventName,(List<String>) invitees);
-                inviteesMap2.put(c,eventName);
-                c++;
                 if(host.equals(firebaseUserEmail)){
+
+                    String eventName = snapshot.getKey();
+                    Object invitees = snapshot.child("invitees").getValue();
+                    inviteesMap.put(eventName,(List<String>) invitees);
+                    inviteesMap2.put(c,eventName);
+                    c++;
+
                     Log.d("100",firebaseUserEmail);
                     String name = snapshot.child("name").getValue().toString();
                     String venue = snapshot.child("venue").getValue().toString();
@@ -71,7 +71,7 @@ public class SentFragment extends Fragment {
                 }
 
                 Log.d("1234Map",inviteesMap.toString());
-                Log.d("1234EventName",eventName);
+//                Log.d("1234EventName",eventName);
 
                 sentAdapter = new SentAdapter(sentList, getContext(),inviteesMap,inviteesMap2);
                 recyclerView.setAdapter(sentAdapter);

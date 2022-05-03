@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ShowRecCard">
+
+
+    <RelativeLayout
+        android:id="@+id/layoutIdR"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/birthday1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nameR"
+            android:paddingTop="250dp"
+            android:text="event_name"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:textStyle="bold">
+        </TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:text="by"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textStyle="bold">
+        </TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/hostnameR"
+            android:text="event_host"
+            android:paddingTop="20dp"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:textStyle="bold">
+        </TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/venueR"
+            android:text="event_venue"
+            android:textAlignment="center"
+            android:paddingTop="50dp"
+            android:textSize="20sp"
+            android:textStyle="bold">
+        </TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/timeR"
+            android:text="event_time1"
+            android:paddingTop="20dp"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold">
+        </TextView>
+
+
+    </LinearLayout>
+    </RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

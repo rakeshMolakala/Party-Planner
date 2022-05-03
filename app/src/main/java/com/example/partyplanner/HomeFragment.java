@@ -18,8 +18,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-
 public class HomeFragment extends Fragment {
 
     @Nullable
@@ -55,7 +53,6 @@ public class HomeFragment extends Fragment {
             Intent i = new Intent(HomeFragment.this.getActivity(), EventActivity.class);
             i.putExtra("event", "birthday");
             startActivity(i);
-
         });
 
         wedding.setOnClickListener(view -> {
@@ -87,7 +84,6 @@ public class HomeFragment extends Fragment {
             i.putExtra("event", "dance");
             startActivity(i);
         });
-
         return viewGroup;
     }
 }

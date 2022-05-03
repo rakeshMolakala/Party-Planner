@@ -1,10 +1,7 @@
-
-
 package com.example.partyplanner;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +17,7 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewHolder> {
 
     private final ArrayList<ChatTabItem> itemList;
     private ChatItemListener listener;
-    private Context fragContext;
+    private final Context fragContext;
 
     public ChatViewAdapter(ArrayList<ChatTabItem> itemList, Context context) {
         this.itemList = itemList;

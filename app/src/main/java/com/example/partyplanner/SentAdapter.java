@@ -1,10 +1,8 @@
 package com.example.partyplanner;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +18,10 @@ import java.util.Map;
 
 public class SentAdapter extends RecyclerView.Adapter<SentAdapter.ViewHolder>{
 
-    private List<SentItem> sentList;
-    private Context context;
-    private Map<String ,List<String>> invMap;
-    private Map<Integer ,String> invMap2;
+    private final List<SentItem> sentList;
+    private final Context context;
+    private final Map<String ,List<String>> invMap;
+    private final Map<Integer ,String> invMap2;
 
     public SentAdapter(List<SentItem> sentList, Context context, Map<String,List<String>> inviteesMap1, Map<Integer ,String> invMap2) {
         this.sentList = sentList;
@@ -45,32 +43,34 @@ public class SentAdapter extends RecyclerView.Adapter<SentAdapter.ViewHolder>{
         holder.sentName.setText(item.getSentName());
         holder.sentVenue.setText(item.getSentVenue());
         holder.sentTime.setText(item.getSentTime());
-        Log.d("123position",""+position);
         String eventName = invMap2.get(position);
 
-        holder.invite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context,Invite.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                Bundle extras = new Bundle();
-                extras.putStringArrayList("invitees",(ArrayList<String>) invMap.get(eventName));
-                extras.putString("eventName",eventName);
-                intent.putExtras(extras);
-                context.startActivity(intent);
-            }
+        holder.view.setOnClickListener(view -> {
+            Intent intent = new Intent(context,ShowSentCard.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Bundle extras = new Bundle();
+            extras.putString("eventName",eventName);
+            intent.putExtras(extras);
+            context.startActivity(intent);
         });
 
-        holder.edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context,EditActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                Bundle extras = new Bundle();
-                extras.putString("eventName",eventName);
-                intent.putExtras(extras);
-                context.startActivity(intent);
-            }
+        holder.invite.setOnClickListener(view -> {
+            Intent intent = new Intent(context,Invite.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Bundle extras = new Bundle();
+            extras.putStringArrayList("invitees",(ArrayList<String>) invMap.get(eventName));
+            extras.putString("eventName",eventName);
+            intent.putExtras(extras);
+            context.startActivity(intent);
+        });
+
+        holder.edit.setOnClickListener(view -> {
+            Intent intent = new Intent(context,EditActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Bundle extras = new Bundle();
+            extras.putString("eventName",eventName);
+            intent.putExtras(extras);
+            context.startActivity(intent);
         });
     }
 
@@ -85,14 +85,16 @@ public class SentAdapter extends RecyclerView.Adapter<SentAdapter.ViewHolder>{
         public TextView sentTime;
         public Button invite;
         public Button edit;
+        public View view;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            sentName = (TextView) itemView.findViewById(R.id.sentEventName);
-            sentVenue = (TextView) itemView.findViewById(R.id.sentVenue);
-            sentTime = (TextView) itemView.findViewById(R.id.sentEventTime);
+            sentName = itemView.findViewById(R.id.sentEventName);
+            sentVenue = itemView.findViewById(R.id.sentVenue);
+            sentTime = itemView.findViewById(R.id.sentEventTime);
             invite = itemView.findViewById(R.id.invite);
             edit = itemView.findViewById(R.id.editButton);
+            this.view = itemView;
         }
     }
 

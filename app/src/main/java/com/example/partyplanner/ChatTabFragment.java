@@ -1,9 +1,6 @@
 package com.example.partyplanner;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,19 +18,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class ChatTabFragment extends Fragment {
     private final ArrayList<ChatTabItem> linkItemCardArrayList = new ArrayList<>();
+    private ViewGroup viewGroup;
     private RecyclerView linkCollectorRecyclerView;
     private ChatViewAdapter itemviewAdapter;
     private ProgressBar progressBar;
-    ViewGroup viewGroup;
 
     @Nullable
     @Override
@@ -45,7 +40,7 @@ public class ChatTabFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        linkCollectorRecyclerView =  viewGroup.findViewById(R.id.chats_recycler_view);
+        linkCollectorRecyclerView = viewGroup.findViewById(R.id.chats_recycler_view);
         progressBar = viewGroup.findViewById(R.id.chatsprogressBar);
         init(viewGroup);
     }
@@ -58,12 +53,10 @@ public class ChatTabFragment extends Fragment {
     private void initialItemData() {
         progressBar.setVisibility(View.VISIBLE);
         FirebaseAuth authentication = FirebaseAuth.getInstance();
-        String firebaseUserEmail = authentication.getCurrentUser().getEmail();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference dataSnapshot = reference.child("Users");
         String userId = authentication.getCurrentUser().getUid();
         final int[] usersCount = new int[1];
-
 
         dataSnapshot.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -86,19 +79,17 @@ public class ChatTabFragment extends Fragment {
                 if (friendsList.size() > 0) {
                     for (Map.Entry<String, List<String>> entry : friendsList.entrySet()) {
                         String email = entry.getKey();
-                        if(email.equals("dummy")) {
+                        if (email.equals("dummy")) {
                             continue;
                         }
                         String username = entry.getValue().get(0);
                         email = cleanEmail(email);
-                        Log.d("tag86Username", username);
-                        Log.d("tag86", entry.getValue().get(1));
                         String profileImage = entry.getValue().get(1);
                         ChatTabItem itemCard = new ChatTabItem(username, email, profileImage);
                         linkItemCardArrayList.add(itemCard);
                         itemviewAdapter.notifyItemInserted(0);
                     }
-                    if (linkItemCardArrayList.size() >= usersCount[0]-1) {
+                    if (linkItemCardArrayList.size() >= usersCount[0] - 1) {
                         progressBar.setVisibility(View.GONE);
                     }
                 }
@@ -108,10 +99,6 @@ public class ChatTabFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-
-
-
-
     }
 
     private String cleanEmail(String email) {
@@ -122,14 +109,10 @@ public class ChatTabFragment extends Fragment {
         RecyclerView.LayoutManager rLayoutManger = new LinearLayoutManager(container.getContext());
         linkCollectorRecyclerView.setHasFixedSize(true);
         itemviewAdapter = new ChatViewAdapter(linkItemCardArrayList, container.getContext());
-        ChatItemListener itemClickListener = new ChatItemListener() {
-            @Override
-            public void onChatItemClick(int position, String userName, String userEmail,
-                                            Context context) {
-                linkItemCardArrayList.get(position).onChatItemClick(position, userName, userEmail,
-                        context);
-                itemviewAdapter.notifyItemChanged(position);
-            }
+        ChatItemListener itemClickListener = (position, userName, userEmail, context) -> {
+            linkItemCardArrayList.get(position).onChatItemClick(position, userName, userEmail,
+                    context);
+            itemviewAdapter.notifyItemChanged(position);
         };
         itemviewAdapter.setOnItemClickListener(itemClickListener);
         linkCollectorRecyclerView.setAdapter(itemviewAdapter);

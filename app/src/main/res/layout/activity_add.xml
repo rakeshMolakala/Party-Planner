@@ -41,6 +41,7 @@
             android:hint="Enter Item"
             android:inputType="text"
             android:padding="13dp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toTopOf="@+id/buttonAdd"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

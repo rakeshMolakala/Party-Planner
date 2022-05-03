@@ -1,4 +1,3 @@
-
 package com.example.partyplanner;
 
 import android.view.View;
@@ -18,17 +17,13 @@ public class ChatViewHolder extends RecyclerView.ViewHolder {
         email = itemView.findViewById(R.id.email);
         profilePicture = itemView.findViewById(R.id.profilePicture);
 
-
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener != null) {
-                    int position = getLayoutPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        listener.onChatItemClick(position, userName.getText().toString(),
-                                email.getText().toString(),
-                                itemView.getContext());
-                    }
+        itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                int position = getLayoutPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onChatItemClick(position, userName.getText().toString(),
+                            email.getText().toString(),
+                            itemView.getContext());
                 }
             }
         });

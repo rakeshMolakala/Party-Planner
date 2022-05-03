@@ -31,36 +31,32 @@ public class EventActivity extends AppCompatActivity {
             case "birthday":
                 card1.setImageResource(R.drawable.birthday1);
                 card2.setImageResource(R.drawable.birthday2);
-                sendingIntent.putExtra("event", "birthday");
+                sendingIntent.putExtra("events", "birthday");
                 break;
             case "wedding":
                 card1.setImageResource(R.drawable.wedding1);
                 card2.setImageResource(R.drawable.wedding2);
-                sendingIntent.putExtra("event", "wedding");
-
+                sendingIntent.putExtra("events", "wedding");
                 break;
             case "pizza":
                 card1.setImageResource(R.drawable.pizza1);
                 card2.setImageResource(R.drawable.pizza2);
-                sendingIntent.putExtra("event", "pizza");
-
+                sendingIntent.putExtra("events", "pizza");
                 break;
             case "christmas":
                 card1.setImageResource(R.drawable.christmas1);
                 card2.setImageResource(R.drawable.christmas2);
-                sendingIntent.putExtra("event", "christmas");
-
+                sendingIntent.putExtra("events", "christmas");
                 break;
             case "halloween":
                 card1.setImageResource(R.drawable.halloween1);
                 card2.setImageResource(R.drawable.halloween2);
-                sendingIntent.putExtra("event", "halloween");
-
+                sendingIntent.putExtra("events", "halloween");
                 break;
             case "dance":
                 card1.setImageResource(R.drawable.dance1);
                 card2.setImageResource(R.drawable.dance2);
-                sendingIntent.putExtra("event", "dance");
+                sendingIntent.putExtra("events", "dance");
                 break;
         }
 

@@ -2,35 +2,38 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="19dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="3dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="110dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:padding="5dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:paddingRight="4sp"
                 android:layout_marginLeft="4sp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingRight="4sp">
 
                 <TextView
                     android:id="@+id/recEventName"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:text="Name"
-                    android:textColor="#5a4fcf"
+                    android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -40,25 +43,26 @@
                 android:id="@+id/recEventVenue"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:text="Venue"
                 android:layout_marginLeft="4sp"
-                android:textColor="#5a4fcf"
+                android:text="Venue"
+                android:textColor="#666666"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:paddingRight="4sp"
                 android:layout_marginLeft="4sp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingRight="4sp">
 
                 <TextView
                     android:id="@+id/recEventTime"
-                    android:layout_width="310dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="30dp"
+                    android:layout_weight="1.99"
                     android:text="Time"
-                    android:textColor="#5a4fcf"
+                    android:textColor="#666666"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -66,21 +70,20 @@
                     android:id="@+id/chat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:layout_weight="1"
+                    android:layout_weight="0.01"
+                    android:visibility="gone"
                     android:text="CHAT"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
 
 
-
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

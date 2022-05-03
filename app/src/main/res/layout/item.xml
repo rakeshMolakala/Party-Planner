@@ -13,6 +13,7 @@
         android:id="@+id/eachItemBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <TextView
@@ -22,6 +23,7 @@
             android:layout_margin="16dp"
             android:text="@string/add"
             android:textColor="#A846F4"
+
             android:textSize="18sp"
             android:textStyle="bold"
             app:drawableRightCompat="@drawable/edit"

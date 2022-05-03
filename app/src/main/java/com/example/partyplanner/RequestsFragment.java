@@ -86,7 +86,6 @@ public class RequestsFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                     }
                 }
-
             }
 
             @Override
@@ -102,7 +101,6 @@ public class RequestsFragment extends Fragment {
                     linkItemCardArrayList.remove(currObj);
                 }
                 itemviewAdapter.notifyItemRemoved(indexOf);
-
             }
 
             @Override
