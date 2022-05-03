@@ -30,6 +30,7 @@ public class SentAdapter extends RecyclerView.Adapter<SentAdapter.ViewHolder>{
         this.context = context;
         this.invMap= inviteesMap1;
         this.invMap2 = invMap2;
+
     }
 
     @NonNull
@@ -45,8 +46,23 @@ public class SentAdapter extends RecyclerView.Adapter<SentAdapter.ViewHolder>{
         holder.sentName.setText(item.getSentName());
         holder.sentVenue.setText(item.getSentVenue());
         holder.sentTime.setText(item.getSentTime());
-        Log.d("123position",""+position);
         String eventName = invMap2.get(position);
+        Log.d("888Map1",invMap.toString());
+        Log.d("888Map2",invMap2.toString());
+        Log.d("888Gap","$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+
+
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,ShowSentCard.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Bundle extras = new Bundle();
+                extras.putString("eventName",eventName);
+                intent.putExtras(extras);
+                context.startActivity(intent);
+            }
+        });
 
         holder.invite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +101,7 @@ public class SentAdapter extends RecyclerView.Adapter<SentAdapter.ViewHolder>{
         public TextView sentTime;
         public Button invite;
         public Button edit;
+        public View view;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -93,6 +110,7 @@ public class SentAdapter extends RecyclerView.Adapter<SentAdapter.ViewHolder>{
             sentTime = (TextView) itemView.findViewById(R.id.sentEventTime);
             invite = itemView.findViewById(R.id.invite);
             edit = itemView.findViewById(R.id.editButton);
+            this.view = itemView;
         }
     }
 

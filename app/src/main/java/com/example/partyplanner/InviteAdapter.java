@@ -69,7 +69,6 @@ public class InviteAdapter extends RecyclerView.Adapter<InviteAdapter.ViewHolder
             invEmail = (TextView) itemView.findViewById(R.id.invEmail);
             checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
         }
-
     }
 
     public ArrayList<InviteItem> getCheckedList(){

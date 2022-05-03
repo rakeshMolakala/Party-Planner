@@ -46,7 +46,6 @@ public class Invite extends AppCompatActivity{
         prevInv = (List<String>)extras.get("invitees");
         currEvent = (String) extras.get("eventName");
         Set<String> prevSet =  new HashSet<>(prevInv);
-        Log.d("45456789",prevSet.toString());
 
         FirebaseAuth authentication = FirebaseAuth.getInstance();
         String firebaseUserEmail = authentication.getCurrentUser().getEmail();
@@ -55,7 +54,6 @@ public class Invite extends AppCompatActivity{
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference dataSnapshot = reference.child("Users");
 
-
         dataSnapshot.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -63,7 +61,12 @@ public class Invite extends AppCompatActivity{
                 if(host.equals(firebaseUserEmail)){
                     for (DataSnapshot o: snapshot.child("friendsList").getChildren()){
                         String email = o.getKey();
-                        String name = o.getValue().toString();
+                        email = email.replaceAll(",",".");
+                        String name="";
+                        for(DataSnapshot x: o.getChildren()){
+                            name = x.getValue().toString();
+                            break;
+                        }
                         if(!prevSet.contains(email) && !email.equals("dummy")){
                             invList.add(new InviteItem(name,email));
                         }
@@ -71,9 +74,6 @@ public class Invite extends AppCompatActivity{
                 }
                 invAdapter = new InviteAdapter(invList,getApplicationContext());
                 recyclerView.setAdapter(invAdapter);
-
-
-
             }
 
             @Override
@@ -108,6 +108,7 @@ public class Invite extends AppCompatActivity{
                 ArrayList<String> newInvitees = new ArrayList<>();
                 checkedInvites = invAdapter.getCheckedList();
                 for (InviteItem inv:checkedInvites) {
+                    Log.d("666EmailFault",inv.getEmail());
                     newInvitees.add(inv.getEmail());
                 }
 
