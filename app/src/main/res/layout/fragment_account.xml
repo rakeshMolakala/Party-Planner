@@ -43,9 +43,9 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
                     android:text="@string/name"
+                    android:textColor="@color/white"
                     android:textSize="25sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"/>
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
@@ -96,8 +96,8 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height=".5dp"
-                                android:layout_marginTop="5dp"
                                 android:layout_marginStart="20dp"
+                                android:layout_marginTop="5dp"
                                 android:layout_marginEnd="20dp"
                                 android:background="#666666" />
 
@@ -106,7 +106,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingTop="5dp"
-                                android:text="@string/_12"
+                                android:text="0"
                                 android:textColor="#A846F4"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -122,9 +122,9 @@
                             <View
                                 android:layout_width="1dp"
                                 android:layout_height="match_parent"
-                                android:background="#666666"
                                 android:layout_marginTop="8dp"
-                                android:layout_marginBottom="8dp"/>
+                                android:layout_marginBottom="8dp"
+                                android:background="#666666" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -137,15 +137,15 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/attended"
+                                android:text="Invited To"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
 
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height=".5dp"
-                                android:layout_marginTop="5dp"
                                 android:layout_marginStart="20dp"
+                                android:layout_marginTop="5dp"
                                 android:layout_marginEnd="20dp"
                                 android:background="#666666" />
 
@@ -154,7 +154,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingTop="5dp"
-                                android:text="@string/_12"
+                                android:text="0"
                                 android:textColor="#A846F4"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -281,10 +281,10 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="12dp"
-                    android:layout_gravity="center"
                     app:cardCornerRadius="15dp"
                     app:cardUseCompatPadding="true">
 
@@ -321,7 +321,9 @@
                         android:id="@+id/editDetails"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawableTint="@color/white"
                         android:text="Edit"
+                        android:textColor="@color/white"
                         app:icon="@drawable/edit"
                         app:iconGravity="textEnd" />
                 </LinearLayout>

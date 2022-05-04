@@ -83,7 +83,8 @@
                         android:layout_marginStart="6dp"
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"
-                        android:text="Pick Date" />
+                        android:text="Pick Date"
+                        android:textColor="@color/white" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -125,7 +126,8 @@
                         android:layout_marginStart="6dp"
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"
-                        android:text="Pick Time" />
+                        android:text="Pick Time"
+                        android:textColor="@color/white" />
                 </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -157,7 +159,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="65dp"
                     android:layout_marginTop="16dp"
-                    android:text="Select location" />
+                    android:text="Select location"
+                    android:textColor="@color/white" />
 
                 <Button
                     android:id="@+id/createEvent"
@@ -165,7 +168,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="48dp"
-                    android:text="Create Event" />
+                    android:text="Create Event"
+                    android:textColor="@color/white" />
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>

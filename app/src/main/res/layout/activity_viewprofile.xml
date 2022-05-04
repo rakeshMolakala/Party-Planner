@@ -106,7 +106,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingTop="5dp"
-                                android:text="@string/_12"
+                                android:text="0"
                                 android:textColor="#A846F4"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -137,7 +137,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/attended"
+                                android:text="Invited To"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
 
@@ -154,7 +154,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingTop="5dp"
-                                android:text="@string/_12"
+                                android:text="0"
                                 android:textColor="#A846F4"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />

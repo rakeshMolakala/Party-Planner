@@ -50,32 +50,6 @@ public class AccountFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_account, container, false);
-        return viewGroup;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        FirebaseAuth authentication = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = authentication.getCurrentUser();
-
-        accountName = viewGroup.findViewById(R.id.accountName);
-        emailAccount = viewGroup.findViewById(R.id.emailAccount);
-        phoneNumberAccount = viewGroup.findViewById(R.id.phoneNumberAccount);
-        addressLine1Account = viewGroup.findViewById(R.id.addressLine1Account);
-        addressLine2Account = viewGroup.findViewById(R.id.addressLine2Account);
-        addressLine3Account = viewGroup.findViewById(R.id.addressLine3Account);
-        TextView preferencesEdit = viewGroup.findViewById(R.id.preferencesEdit);
-        LinearLayout logout = viewGroup.findViewById(R.id.logout);
-        Button editDetails = viewGroup.findViewById(R.id.editDetails);
-        ImageView profilePicture = viewGroup.findViewById(R.id.profilePicture);
-        progressbar = viewGroup.findViewById(R.id.progressbarLogout);
-
-        currUser = firebaseUser.getEmail();
-        hostedView = viewGroup.findViewById(R.id.eventConductedCount);
-        invitedView = viewGroup.findViewById(R.id.eventAttendedCount);
-
         DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference();
 
         DatabaseReference dataSnapshot = reference1.child("Events");
@@ -116,9 +90,31 @@ public class AccountFragment extends Fragment {
             }
 
         });
+        return viewGroup;
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
 
+        FirebaseAuth authentication = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = authentication.getCurrentUser();
 
+        accountName = viewGroup.findViewById(R.id.accountName);
+        emailAccount = viewGroup.findViewById(R.id.emailAccount);
+        phoneNumberAccount = viewGroup.findViewById(R.id.phoneNumberAccount);
+        addressLine1Account = viewGroup.findViewById(R.id.addressLine1Account);
+        addressLine2Account = viewGroup.findViewById(R.id.addressLine2Account);
+        addressLine3Account = viewGroup.findViewById(R.id.addressLine3Account);
+        TextView preferencesEdit = viewGroup.findViewById(R.id.preferencesEdit);
+        LinearLayout logout = viewGroup.findViewById(R.id.logout);
+        Button editDetails = viewGroup.findViewById(R.id.editDetails);
+        ImageView profilePicture = viewGroup.findViewById(R.id.profilePicture);
+        progressbar = viewGroup.findViewById(R.id.progressbarLogout);
+
+        currUser = firebaseUser.getEmail();
+        hostedView = viewGroup.findViewById(R.id.eventConductedCount);
+        invitedView = viewGroup.findViewById(R.id.eventAttendedCount);
 
         progressbar.setVisibility(View.VISIBLE);
         if (firebaseUser == null) {

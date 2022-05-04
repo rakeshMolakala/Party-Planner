@@ -67,7 +67,6 @@ public class EditActivity extends AppCompatActivity {
             timePick.setText(prevTime);
         }
 
-
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -92,9 +91,23 @@ public class EditActivity extends AppCompatActivity {
                     nameSnapshot = snapshot.getRef().child("name");
                     timeSnapshot = snapshot.getRef().child("time");
                     addressSnapShot = snapshot.getRef().child("venue");
+                    if(eventName.getText().toString().length()==0){
+                        eventName.setText(snapshot.child("name").getValue().toString());
+                    }
+                    if(eventName.getText().toString().length()==0){
+                        eventName.setText(snapshot.child("name").getValue().toString());
+                    }
+                    if(addressPick.getText().toString().length()==0){
+                        addressPick.setText(snapshot.child("venue").getValue().toString());
+                    }
+                    if(datePick.getText().toString().length()==0 && timePick.getText().toString().length()==0){
+                        String d = snapshot.child("time").getValue().toString();
+                        String[] d2 = d.split("at");
+                        datePick.setText(d2[0].trim());
+                        timePick.setText(d2[1].trim());
+                    }
 
                     String x = snapshot.child("time").getValue().toString();
-
                     String[] arr = x.split(" ");
                     prevDate = arr[0];
                     prevTime = arr[2];
@@ -124,10 +137,10 @@ public class EditActivity extends AppCompatActivity {
 
         ok.setOnClickListener(view -> {
             newEvent = eventName.getText().toString();
-            if (newEvent.length() > 0) {
+            if (newEvent.length() > 0 && !addressPick.getText().toString().isEmpty() && !datePick.getText().toString().isEmpty() && !timePick.getText().toString().isEmpty()) {
                 nameSnapshot.setValue(newEvent);
-                timeSnapshot.setValue(prevDate + " at " + prevTime);
-                addressSnapShot.setValue(address);
+                timeSnapshot.setValue(datePick.getText().toString() + " at " + timePick.getText().toString());
+                addressSnapShot.setValue(addressPick.getText().toString());
 
                 Toast.makeText(getApplicationContext(), "Details changed", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -161,8 +174,8 @@ public class EditActivity extends AppCompatActivity {
             Intent intent2 = new Intent(EditActivity.this, EditVenue.class);
             intent2.putExtra("currEvent", currEvent);
             intent2.putExtra("eventName", eventName.getText().toString());
-            intent2.putExtra("prevDate", prevDate);
-            intent2.putExtra("prevTime", prevTime);
+            intent2.putExtra("prevDate", datePick.getText().toString());
+            intent2.putExtra("prevTime", timePick.getText().toString());
             finish();
             startActivity(intent2);
         });

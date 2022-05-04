@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -32,9 +33,11 @@ public class ViewProfile extends AppCompatActivity {
     String userName;
     ImageView profilePictureView;
     TextView accountNameView;
-    TextView eventConductedCountView, eventAttendedCountView, emailView, phoneNumberView, addressLine1View, addressLine2View, addressLine3View, preferencesView;
+    TextView emailView, phoneNumberView, addressLine1View, addressLine2View, addressLine3View, preferencesView;
     ProgressBar progressbarProfileView;
     ListView foodsView, drinksView;
+    LinearLayout addressMaps;
+    String address;
 
     private TextView hostedView;
     private TextView invitedView;
@@ -51,6 +54,76 @@ public class ViewProfile extends AppCompatActivity {
         Intent i = getIntent();
         userName = i.getStringExtra("UserName");
 
+        DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference dataSnapshot = reference1.child("Users");
+        dataSnapshot.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot1, @Nullable String previousChildName) {
+                String currUserName = snapshot1.child("username").getValue().toString();
+                if(userName.equals(currUserName)){
+                    currUser = snapshot1.child("email").getValue().toString();
+                    DatabaseReference dataSnapshot2 = reference1.child("Events");
+                    dataSnapshot2.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(@NonNull DataSnapshot snapshot2, @Nullable String previousChildName) {
+                            String host = snapshot2.child("host").getValue().toString();
+                            Object invitees = snapshot2.child("invitees").getValue();
+                            List<String> inviteesList = (List<String>) invitees;
+                            if(host.equals(currUser)){
+                                hosted++;
+                                hostedView.setText(String.valueOf(hosted));
+                            }
+                            else {
+                                if(inviteesList.size()>0 && inviteesList.contains(currUser)){
+                                    invited++;
+                                    invitedView.setText(String.valueOf(invited));
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override
@@ -61,8 +134,6 @@ public class ViewProfile extends AppCompatActivity {
 
         profilePictureView = findViewById(R.id.profilePictureView);
         accountNameView = findViewById(R.id.accountNameView);
-        eventConductedCountView = findViewById(R.id.eventConductedCountView);
-        eventAttendedCountView = findViewById(R.id.eventAttendedCountView);
         emailView = findViewById(R.id.emailView);
         phoneNumberView = findViewById(R.id.phoneNumberView);
         addressLine1View = findViewById(R.id.addressLine1View);
@@ -71,10 +142,9 @@ public class ViewProfile extends AppCompatActivity {
         progressbarProfileView = findViewById(R.id.progressbarProfileView);
         foodsView = findViewById(R.id.foodsView);
         drinksView = findViewById(R.id.drinksView);
-
+        addressMaps = findViewById(R.id.addressMaps);
         hostedView = findViewById(R.id.eventConductedCountView);
         invitedView = findViewById(R.id.eventAttendedCountView);
-
 
         progressbarProfileView.setVisibility(View.VISIBLE);
         if (firebaseUser == null) {
@@ -100,6 +170,7 @@ public class ViewProfile extends AppCompatActivity {
                             addressLine1View.setText(details.address.get(0));
                             addressLine2View.setText(details.address.get(1));
                             addressLine3View.setText(details.address.get(2));
+                            address = addressLine1View.getText().toString() + ", " + addressLine2View.getText().toString() + ", " + addressLine3View.getText().toString();
                             ArrayList<String> foodsArray = new ArrayList<>(details.preferences.get(0));
                             ArrayList<String> drinksArray = new ArrayList<>(details.preferences.get(1));
                             ArrayAdapter<String> foodsAdapter = new ArrayAdapter<>(ViewProfile.this, android.R.layout.simple_list_item_1, foodsArray);
@@ -135,80 +206,26 @@ public class ViewProfile extends AppCompatActivity {
             });
         }
 
-        DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference();
+        emailView.setOnClickListener(view -> {
+            Intent myIntent = new Intent(Intent.ACTION_SEND);
+            myIntent.setType("message/rfc822");
+            startActivity(myIntent);
+        });
 
-        DatabaseReference dataSnapshot = reference1.child("Users");
-        dataSnapshot.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                String currUserName = snapshot.child("username").getValue().toString();
-                if(userName.equals(currUserName)){
-                    currUser = snapshot.child("email").getValue().toString();
-                    DatabaseReference dataSnapshot2 = reference1.child("Events");
-                    dataSnapshot2.addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                            String host = snapshot.child("host").getValue().toString();
-                            Object invitees = snapshot.child("invitees").getValue();
-                            List<String> inviteesList = (List<String>) invitees;
-                            if(host.equals(currUser)){
-                                hosted++;
-                                hostedView.setText(String.valueOf(hosted));
+        phoneNumberView.setOnClickListener(view -> {
+            Intent myIntent = new Intent(Intent.ACTION_DIAL);
+            String phNum = "tel:" + phoneNumberView.getText();
+            myIntent.setData(Uri.parse(phNum));
+            startActivity(myIntent);
+        });
 
-                            }
-                            else {
-                                if(inviteesList.size()>0 && inviteesList.contains(currUser)){
-                                    invited++;
-                                    invitedView.setText(String.valueOf(invited));
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                        }
-
-                        @Override
-                        public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-
-                    });
-
-                }
+        addressMaps.setOnClickListener(view -> {
+            if (address.length()>5) {
+                Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
             }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-
         });
     }
 }

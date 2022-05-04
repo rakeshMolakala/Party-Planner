@@ -35,8 +35,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_marginStart="20dp"
+                    android:layout_marginTop="9dp"
                     android:text="@string/name"
-                    android:textColor="#6F00EC"
+                    android:textColor="@color/purple_500"
                     android:textSize="23sp"
                     android:textStyle="bold" />
 
@@ -46,9 +47,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:text="@string/email"
-                    android:textColor="#6F00EC"
-                    android:textSize="23sp"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="8dp"
+                    android:textColor="#666666"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
 
             </LinearLayout>
 

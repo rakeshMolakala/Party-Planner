@@ -2,6 +2,7 @@ package com.example.partyplanner;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,7 @@ public class Invite extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite);
+        getSupportActionBar().hide();
         invList = new ArrayList<>();
         Bundle extras = getIntent().getExtras();
         prevInv = (List<String>) extras.get("invitees");
@@ -92,7 +94,7 @@ public class Invite extends AppCompatActivity {
 
         });
 
-        FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
+        Button floatingActionButton = findViewById(R.id.floatingActionButton);
         checkedInvites = new ArrayList<>();
         floatingActionButton.setOnClickListener(view -> {
             DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference();
