@@ -1,4 +1,4 @@
-# Dungeon
+# Party Planner
 
 ## Description
 
